@@ -13,9 +13,6 @@ class Test::Unit::TestCase
 
   include Rack::Test::Methods
 
-  alias_method :request,  :last_request
-  alias_method :response, :last_response
-
   include Webrat::Matchers
   include Webrat::HaveTagMatcher
 
