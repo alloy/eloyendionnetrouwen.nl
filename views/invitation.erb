@@ -37,12 +37,12 @@
               <form action="/invitations/<%= @invitation.id %>" method="post">
                 <fieldset>
                   <label>
-                    <input type="radio" name="invitation[attending_wedding]" value="1" checked="checked" />
+                    <input type="radio" name="invitation[attending_wedding]" value="1" <%= 'checked="checked"' if @invitation.attending_wedding? %> />
                     Wij zijn om 13:30 bij de bruiloft aanwezig!
                   </label>
                   <br/><%# TODO %>
                   <label>
-                    <input type="radio" name="invitation[attending_wedding]" value="0" />
+                    <input type="radio" name="invitation[attending_wedding]" value="0" <%= 'checked="checked"' if !@invitation.attending_wedding? %> />
                     Wij kunnen helaas pas vanaf 15:00 aanwezig zijn bij het feest.
                   </label>
                   <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" style="width:80%;" />
