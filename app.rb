@@ -11,6 +11,9 @@ require 'logger'
 ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
 class Invitation < ActiveRecord::Base
+  def attendees_list
+    attendees.split(",").map { |a| a.strip }
+  end
 end
 
 get '/' do
@@ -22,6 +25,7 @@ get '/:invitation_id' do
 end
 
 post '/invitations/:id' do |id|
-  p params
+  invitation = Invitation.find(id)
+  invitation.update_attributes(params[:invitation])
   redirect to("/invitations/#{id}")
 end
