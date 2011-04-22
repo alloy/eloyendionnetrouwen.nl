@@ -31,13 +31,22 @@
           <div id="content">
             <p>Wij gaan trouwen en zouden jullie er graag bij hebben!</p>
 
-            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, want anders kunnen we niet garanderen dat je gevoederd wordt!</p>
+            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, want anders kunnen we niet garanderen dat je gevoederd wordt.</p>
 
             <p>
               <form action="/invitations" method="post">
                 <fieldset>
+                  <label>
+                    <input type="radio" name="attending_wedding" checked="checked" />
+                    Wij zijn om 13:30 bij de bruiloft aanwezig!
+                  </label>
+                  <br/><%# TODO %>
+                  <label>
+                    <input type="radio" name="attending_wedding" />
+                    Wij kunnen helaas pas vanaf 15:00 aanwezig zijn bij het feest.
+                  </label>
                   <input type="text" name="attendees" value="Bassie, Adriaan" style="width:80%;" />
-                  <input type="submit" value="Wij komen!" />
+                  <input type="submit" value="Tot dan!" />
                   <span class="small">Scheidt de namen met een comma.</span>
                 </fieldset>
               </form>
