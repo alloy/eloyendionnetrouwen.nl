@@ -10,6 +10,8 @@ class InvitationTest < Test::Unit::TestCase
   end
 
   it "cleans the whitespace between the names" do
+    @invitation.attendees = "Bassie, "
+    assert_equal 'Bassie', @invitation.attendees
     @invitation.attendees = "Bassie,Adriaan"
     assert_equal 'Bassie, Adriaan', @invitation.attendees
     @invitation.attendees = "  Bassie\t \t,Adriaan   "
@@ -44,7 +46,8 @@ class InviteeTest < Test::Unit::TestCase
     get "/invitations/#{@invitation.id}"
     assert last_response.ok?
     assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
-      assert_have_tag 'input[@name="attendees"][@value="Bassie, Adriaan"]'
+      assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]'
+      assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
     end
   end
 

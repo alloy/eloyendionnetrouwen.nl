@@ -12,7 +12,7 @@ ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environ
 
 class Invitation < ActiveRecord::Base
   def attendees=(attendees)
-    write_attribute :attendees, list(attendees).join(", ")
+    write_attribute :attendees, list(attendees).reject(&:empty?).join(", ")
   end
 
   def attendees_list
