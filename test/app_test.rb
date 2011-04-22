@@ -34,10 +34,16 @@ class InviteeTest < Test::Unit::TestCase
     Invitation.delete_all
   end
 
-  it "sees an invitation page" do
+  it "is redirected to the actual invitation page" do
     get "/#{@invitation.id}"
+    assert last_response.redirect?
+    assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
+  end
+
+  it "sees an invitation page" do
+    get "/invitations/#{@invitation.id}"
     assert last_response.ok?
-    assert_have_tag 'form[@action="/invitations"][@method=post]' do
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
       assert_have_tag 'input[@name="attendees"][@value="Bassie, Adriaan"]'
     end
   end

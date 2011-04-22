@@ -40,6 +40,10 @@ get '/' do
 end
 
 get '/:invitation_id' do |id|
+  redirect to("/invitations/#{id}")
+end
+
+get '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
   erb :invitation
 end
