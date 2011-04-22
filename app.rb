@@ -11,8 +11,27 @@ require 'logger'
 ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
 class Invitation < ActiveRecord::Base
+  def attendees=(attendees)
+    write_attribute :attendees, list(attendees).join(", ")
+  end
+
   def attendees_list
-    attendees.split(",").map { |a| a.strip }
+    list(attendees)
+  end
+
+  def attendees_sentence
+    list = attendees_list
+    if list.size == 1
+      list.first
+    else
+      list[0..-2].join(", ") << " en #{list.last}"
+    end
+  end
+
+  private
+
+  def list(str)
+    str.split(",").map { |a| a.strip }
   end
 end
 
@@ -20,12 +39,13 @@ get '/' do
   erb :index
 end
 
-get '/:invitation_id' do
+get '/:invitation_id' do |id|
+  @invitation = Invitation.find(id)
   erb :invitation
 end
 
 post '/invitations/:id' do |id|
-  invitation = Invitation.find(id)
-  invitation.update_attributes(params[:invitation])
+  @invitation = Invitation.find(id)
+  @invitation.update_attributes(params[:invitation])
   redirect to("/invitations/#{id}")
 end

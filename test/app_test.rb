@@ -1,5 +1,30 @@
 require File.expand_path('../test_helper', __FILE__)
 
+class InvitationTest < Test::Unit::TestCase
+  def setup
+    @invitation = Invitation.new(:attendees => 'Bassie, Adriaan')
+  end
+
+  def teardown
+    Invitation.delete_all
+  end
+
+  it "cleans the whitespace between the names" do
+    @invitation.attendees = "Bassie,Adriaan"
+    assert_equal 'Bassie, Adriaan', @invitation.attendees
+    @invitation.attendees = "  Bassie\t \t,Adriaan   "
+    assert_equal 'Bassie, Adriaan', @invitation.attendees
+  end
+
+  it "returns a sentence for the list of attendees" do
+    assert_equal 'Bassie en Adriaan', @invitation.attendees_sentence
+    @invitation.attendees = 'Greet'
+    assert_equal 'Greet', @invitation.attendees_sentence
+    @invitation.attendees = 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka'
+    assert_equal 'Rini, Sander, Mats, Mila, Nena, Jacky en Yuka', @invitation.attendees_sentence
+  end
+end
+
 class InviteeTest < Test::Unit::TestCase
   def setup
     @invitation = Invitation.create(:attendees => 'Bassie, Adriaan')
