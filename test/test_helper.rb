@@ -1,10 +1,12 @@
 require 'rubygems'
+require 'sinatra'
+
+set :environment, :test
+
 require File.expand_path('../../app', __FILE__)
 require 'test/unit'
 require 'rack/test'
 require 'webrat'
-
-set :environment, :test
 
 class Test::Unit::TestCase
   def self.it(description, &block)

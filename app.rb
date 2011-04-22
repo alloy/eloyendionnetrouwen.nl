@@ -1,5 +1,13 @@
 require 'sinatra'
 require 'erb'
+require 'sinatra/activerecord'
+
+set :database, "sqlite://#{Sinatra::Application.environment}.db"
+set :root, File.expand_path('../', __FILE__)
+#set :database, "mysql://localhost/eloyendionnetrouwen-#{Sinatra::Application.environment}"
+
+class Invitation < ActiveRecord::Base
+end
 
 get '/' do
   erb :index
