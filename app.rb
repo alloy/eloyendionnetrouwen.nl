@@ -2,9 +2,13 @@ require 'sinatra'
 require 'erb'
 require 'sinatra/activerecord'
 
-set :database, "sqlite://#{Sinatra::Application.environment}.db"
+app = Sinatra::Application
+set :database, "sqlite://#{app.environment}.db"
 set :root, File.expand_path('../', __FILE__)
 #set :database, "mysql://localhost/eloyendionnetrouwen-#{Sinatra::Application.environment}"
+
+require 'logger'
+ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
 class Invitation < ActiveRecord::Base
 end

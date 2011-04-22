@@ -2,7 +2,8 @@ require File.expand_path('../test_helper', __FILE__)
 
 class InviteeTest < Test::Unit::TestCase
   def setup
-    Invitation.create(:id => 123, :attendees => 'Bassie, Adriaan')
+    invitation = Invitation.create(:id => 123, :attendees => 'Bassie, Adriaan')
+    p invitation
   end
 
   def teardown
