@@ -11,6 +11,10 @@ require 'logger'
 ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
 class Invitation < ActiveRecord::Base
+  def vegetarians=(amount)
+    write_attribute :vegetarians, amount.to_i
+  end
+
   def attendees=(attendees)
     write_attribute :attendees, list(attendees).reject(&:empty?).join(", ")
   end
@@ -38,6 +42,13 @@ class Invitation < ActiveRecord::Base
     str.split(",").map { |a| a.strip }
   end
 
+  def not_more_vegetarians_than_attendees
+    if vegetarians > attendees_list.size
+      errors.add(:vegeterians, "er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn")
+    end
+  end
+
+  validate :not_more_vegetarians_than_attendees
   validates_presence_of :attendees
 end
 

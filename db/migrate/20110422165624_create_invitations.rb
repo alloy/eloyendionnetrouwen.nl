@@ -6,7 +6,7 @@ class CreateInvitations < ActiveRecord::Migration
       t.boolean :attending_wedding, :default => false
       t.boolean :attending_party, :default => false
       t.boolean :attending_dinner, :default => false
-      t.boolean :vegetarian_dinner, :default => false
+      t.integer :vegetarians, :default => 0, :null => false
       t.boolean :confirmed, :default => false
     end
   end

@@ -15,6 +15,16 @@ class InvitationTest < Test::Unit::TestCase
     assert !@invitation.valid?
   end
 
+  it "is invalid with more vegetarians than attendees" do
+    assert @invitation.valid?
+    @invitation.vegetarians = 1
+    assert @invitation.valid?
+    @invitation.vegetarians = 2
+    assert @invitation.valid?
+    @invitation.vegetarians = 3
+    assert !@invitation.valid?
+  end
+
   it "cleans the whitespace between the names" do
     @invitation.attendees = "Bassie, "
     assert_equal 'Bassie', @invitation.attendees
@@ -42,6 +52,12 @@ class InvitationTest < Test::Unit::TestCase
     assert @invitation.attending?
     @invitation.attending_party = false
     assert !@invitation.attending?
+  end
+
+  it "ensures that #vegetarians isn't nil" do
+    assert_equal 0, @invitation.vegetarians
+    @invitation.vegetarians = ''
+    assert_equal 0, @invitation.vegetarians
   end
 end
 
@@ -97,11 +113,11 @@ class InviteeTest < Test::Unit::TestCase
     assert @invitation.attending_dinner?
   end
 
-  it "confirms if they want a vegetarian dinner" do
-    update_invitation :vegetarian_dinner => '0'
-    assert !@invitation.vegetarian_dinner?
-    update_invitation :vegetarian_dinner => '1'
-    assert @invitation.vegetarian_dinner?
+  it "confirms how many vegetarians there are" do
+    update_invitation :vegetarians => '0'
+    assert_equal 0, @invitation.vegetarians
+    update_invitation :vegetarians => '2'
+    assert_equal 2, @invitation.vegetarians
   end
 
   it "sees a confirmation page" do
