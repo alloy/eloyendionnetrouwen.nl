@@ -57,6 +57,10 @@ class Invitation < ActiveRecord::Base
 end
 
 helpers do
+  def textfield(attr, style)
+    %{<input type="text" name="invitation[#{attr}]" value="#{@invitation.send(attr)}" #{'class="error"' unless @invitation.errors[attr].empty?} style="#{style}" />}
+  end
+
   def checkbox(attr, label)
     %{<input type="hidden" name="invitation[#{attr}]" value="0" />
       <label>

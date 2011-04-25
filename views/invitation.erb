@@ -50,7 +50,7 @@
                 <fieldset>
                   <%# TODO add validation error if this is empty! %>
                   <label>
-                    Wij <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" <%= 'class="error"' if @invitation.errors[:attendees] %> style="width:90%;" />
+                    Wij <%= textfield :attendees, "width:90%;" %>
                   </label>
                   <span class="small">Scheidt de namen met een komma.</span>
                   <br/>
@@ -69,9 +69,7 @@
 
                     <div id="vegetarian_dinner" style="margin-left:16px;">
                       <label>
-                        Maar wel graag vegetarisch voor
-                        <input type="text" name="invitation[vegetarians]" value="<%= @invitation.vegetarians %>" <%= 'class="error"' if @invitation.errors[:vegetarians] %> style="width:16px;" />
-                        personen.
+                        Maar wel graag vegetarisch voor <%= textfield :vegetarians, "width:16px;" %> personen.
                       </label>
                       <br/>
                     </div>
