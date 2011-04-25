@@ -29,25 +29,57 @@
           <h2><%= @invitation.attendees_sentence %>, komen jullie ook?</h2>
           <hr/>
           <div id="content">
-            <p>Wij gaan trouwen en zouden jullie er graag bij hebben!</p>
+            <p>Eloy en Dionne trouwen en zouden jullie er graag bij hebben!</p>
 
-            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, want anders kunnen we niet garanderen dat je gevoederd wordt.</p>
+            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of deselecteer alle vakjes indien jullie helemaal niet kunnen.</p>
 
             <p>
               <form action="/invitations/<%= @invitation.id %>" method="post">
                 <fieldset>
                   <label>
-                    <input type="radio" name="invitation[attending_wedding]" value="1" <%= 'checked="checked"' if @invitation.attending_wedding? %> />
-                    Wij zijn om 13:30 bij de bruiloft aanwezig!
+                    Wij <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" style="width:90%;" />
                   </label>
-                  <br/><%# TODO %>
-                  <label>
-                    <input type="radio" name="invitation[attending_wedding]" value="0" <%= 'checked="checked"' if !@invitation.attending_wedding? %> />
-                    Wij kunnen helaas pas vanaf 15:00 aanwezig zijn bij het feest.
-                  </label>
-                  <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" style="width:80%;" />
-                  <input type="submit" value="Tot dan!" />
                   <span class="small">Scheidt de namen met een comma.</span>
+                  <br/>
+
+                  <br/>
+
+                  <label>
+                    <input type="checkbox" name="invitation[attending_wedding]" value="1" checked="checked" />
+                    zijn om 13:30 bij de bruiloft in de stopera aanwezig
+                  </label>
+                  <br/>
+
+                  <label>
+                    <input type="checkbox" name="invitation[attending_party]" value="1" checked="checked" />
+                    we feesten vanaf 15:00 mee in het Flevopark
+                  </label>
+                  <br/>
+
+                  <%# TODO Only show this if the invitee has indicated they will join the party %>
+                  <label>
+                    <input type="checkbox" name="invitation[attending_dinner]" value="1" checked="checked" />
+                    lekker, aan de BBQ om 18:00 doen we mee
+                  </label>
+                  <br/>
+
+                  <%# TODO Only show this if the invitee has indicated they will join the party %>
+                  <label>
+                    <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" />
+                    maar wel vegetarisch!
+                  </label>
+                  <br/>
+
+                  <br/>
+
+                  <label>
+                    Zodra er meer informatie beschikbaar is laat het ons dan weten op het volgende email adres: <input type="text" name="invitation[email]" value="bassie@caravan.es" style="width:56%;" />
+                  </label>
+                  <br/>
+
+                  <br/>
+
+                  <input type="submit" value="Tot dan!" />
                 </fieldset>
               </form>
             </p>
