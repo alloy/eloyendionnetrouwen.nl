@@ -19,7 +19,7 @@ namespace :db do
 
   task :seed do
     require 'app'
-    p Invitation.create(:attendees => 'Bassie, Adriaan').id
-    p Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka').id
+    p Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').id
+    p Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').id
   end
 end
