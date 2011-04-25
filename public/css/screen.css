@@ -255,6 +255,11 @@ ul.columns
   color: red;
 }
 
+input.error
+{
+  border-color: red;
+}
+
 .small, .small a, p.date, p.date a, p#footnote, p#footnote a, del, del a
 {
   color:#888;

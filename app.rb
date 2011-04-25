@@ -48,7 +48,7 @@ class Invitation < ActiveRecord::Base
 
   def not_more_vegetarians_than_attendees
     if vegetarians > attendees_list.size
-      errors.add(:vegeterians, "Er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn.")
+      errors.add(:vegetarians, "Er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn.")
     end
   end
 
