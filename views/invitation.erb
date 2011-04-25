@@ -37,6 +37,15 @@
             <hr/>
 
             <p>
+              <% unless @invitation.valid? %>
+                <div class="errors">
+                  <ul>
+                    <% @invitation.errors.each do |attr, message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
               <form action="/invitations/<%= @invitation.id %>" method="post">
                 <fieldset>
                   <%# TODO add validation error if this is empty! %>

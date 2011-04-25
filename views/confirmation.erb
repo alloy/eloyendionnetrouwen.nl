@@ -27,7 +27,7 @@
             </ul>
             <hr class="right"/>
           </div>
-          <h2>Controleer onderstaande gegevens</h2>
+          <h2>Klopt dit?</h2>
           <hr/>
           <div id="content">
             <% if @invitation.attending? %>
@@ -39,8 +39,12 @@
                   <li>Zijn alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
                 <% end %>
                 <% if @invitation.attending_dinner? %>
-                  <li>2 gasten maken gebruik van de vlees BBQ</li>
-                  <li>3 gasten maken gebruik van de vegetarische BBQ</li>
+                  <% if (omnivores = @invitation.omnivores) > 0 %>
+                    <li><%= omnivores %> gasten maken gebruik van de vlees BBQ</li>
+                  <% end %>
+                  <% if @invitation.vegetarians > 0 %>
+                    <li><%= @invitation.vegetarians %> gasten maken gebruik van de vegetarische BBQ</li>
+                  <% end %>
                 <% end %>
               </ul>
 

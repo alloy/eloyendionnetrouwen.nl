@@ -250,6 +250,11 @@ ul.columns
   column-width:215px;
 }
 
+.errors ul
+{
+  color: red;
+}
+
 .small, .small a, p.date, p.date a, p#footnote, p#footnote a, del, del a
 {
   color:#888;

@@ -15,6 +15,10 @@ class Invitation < ActiveRecord::Base
     write_attribute :vegetarians, amount.to_i
   end
 
+  def omnivores
+    attendees_list.size - vegetarians
+  end
+
   def attendees=(attendees)
     write_attribute :attendees, list(attendees).reject(&:empty?).join(", ")
   end
@@ -44,12 +48,12 @@ class Invitation < ActiveRecord::Base
 
   def not_more_vegetarians_than_attendees
     if vegetarians > attendees_list.size
-      errors.add(:vegeterians, "er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn")
+      errors.add(:vegeterians, "Er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn.")
     end
   end
 
+  validates_presence_of :attendees, :message => "De gastenlijst mag niet leeg zijn."
   validate :not_more_vegetarians_than_attendees
-  validates_presence_of :attendees
 end
 
 helpers do
@@ -77,8 +81,11 @@ end
 
 post '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
-  @invitation.update_attributes(params[:invitation])
-  redirect to("/invitations/#{id}/confirm")
+  if @invitation.update_attributes(params[:invitation])
+    redirect to("/invitations/#{id}/confirm")
+  else
+    erb :invitation
+  end
 end
 
 get '/invitations/:id/confirm' do |id|

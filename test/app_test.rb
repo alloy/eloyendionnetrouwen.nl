@@ -59,6 +59,14 @@ class InvitationTest < Test::Unit::TestCase
     @invitation.vegetarians = ''
     assert_equal 0, @invitation.vegetarians
   end
+
+  it "returns the amount of omnivores" do
+    assert_equal 2, @invitation.omnivores
+    @invitation.vegetarians = 1
+    assert_equal 1, @invitation.omnivores
+    @invitation.vegetarians = 2
+    assert_equal 0, @invitation.omnivores
+  end
 end
 
 class InviteeTest < Test::Unit::TestCase
@@ -118,6 +126,17 @@ class InviteeTest < Test::Unit::TestCase
     assert_equal 0, @invitation.vegetarians
     update_invitation :vegetarians => '2'
     assert_equal 2, @invitation.vegetarians
+  end
+
+  it "shows the form with validation errors" do
+    post "/invitations/#{@invitation.id}", :invitation => { :attendees => '', :vegetarians => 3 }
+    assert last_response.ok?
+    assert_have_tag 'li', :content => "De gastenlijst mag niet leeg zijn."
+    assert_have_tag 'li', :content => "Er kunnen niet meer vegetariërs (3) dan gasten (0) zijn."
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
+      assert_have_tag 'input[@name="invitation[vegetarians]"][@value="3"]'
+    end
+    assert_equal 0, @invitation.reload.vegetarians
   end
 
   it "sees a confirmation page" do
