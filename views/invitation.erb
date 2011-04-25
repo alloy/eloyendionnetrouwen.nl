@@ -11,6 +11,7 @@
     <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="../../css/ipad.css" type="text/css"/>
     <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
     <link href="/images/icon.jpg" rel="apple-touch-icon"/>
+    <script type="text/javascript" src="../../js/zepto.js"></script>
   </head>
   <body>
     <div id="wrapper">
@@ -31,7 +32,7 @@
           <div id="content">
             <p>Eloy en Dionne trouwen en zouden jullie er graag bij hebben!</p>
 
-            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of deselecteer alle vakjes indien jullie helemaal niet kunnen.</p>
+            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of laat alle vakjes leeg indien jullie helemaal niet kunnen.</p>
 
             <p>
               <form action="/invitations/<%= @invitation.id %>" method="post">
@@ -39,36 +40,39 @@
                   <label>
                     Wij <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" style="width:90%;" />
                   </label>
-                  <span class="small">Scheidt de namen met een comma.</span>
+                  <span class="small">Scheidt de namen met een komma.</span>
                   <br/>
 
                   <br/>
 
                   <label>
-                    <input type="checkbox" name="invitation[attending_wedding]" value="1" checked="checked" />
-                    zijn om 13:30 bij de bruiloft in de stopera aanwezig
+                    <input type="checkbox" name="invitation[attending_wedding]" value="1" />
+                    zijn om 13:30 bij de bruiloft in de Stopera aanwezig
                   </label>
                   <br/>
 
                   <label>
-                    <input type="checkbox" name="invitation[attending_party]" value="1" checked="checked" />
+                    <input type="checkbox" id="attending_party" name="invitation[attending_party]" value="1" />
                     we feesten vanaf 15:00 mee in het Flevopark
                   </label>
                   <br/>
 
                   <%# TODO Only show this if the invitee has indicated they will join the party %>
-                  <label>
-                    <input type="checkbox" name="invitation[attending_dinner]" value="1" checked="checked" />
-                    lekker, aan de BBQ om 18:00 doen we mee
-                  </label>
-                  <br/>
+                  <div id="dinner">
+                    <label>
+                      <input type="checkbox" name="invitation[attending_dinner]" value="1" />
+                      lekker, aan de BBQ om 18:00 doen we mee
+                    </label>
+                    <br/>
 
-                  <%# TODO Only show this if the invitee has indicated they will join the party %>
-                  <label>
-                    <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" />
-                    maar wel vegetarisch!
-                  </label>
-                  <br/>
+                    <div id="vegetarian_dinner">
+                      <label>
+                        <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" />
+                        maar wel vegetarisch!
+                      </label>
+                      <br/>
+                    </div>
+                  </div>
 
                   <br/>
 
@@ -79,10 +83,20 @@
 
                   <br/>
 
-                  <input type="submit" value="Tot dan!" />
+                  <input type="submit" value="Nu nog even controleren &rarr;" />
                 </fieldset>
               </form>
             </p>
+
+            <script type="text/javascript">
+              var attending_dinner = $('#dinner');
+              var vegetarian_dinner = $('#vegetarian_dinner');
+              attending_dinner.hide();
+              vegetarian_dinner.hide();
+              $('#attending_party').bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
+              attending_dinner.find('input').first().bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
+            </script>
+
           </div>
           <hr/>
         </div>
