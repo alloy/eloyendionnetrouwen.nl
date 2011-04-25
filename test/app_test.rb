@@ -35,7 +35,7 @@ end
 
 class InviteeTest < Test::Unit::TestCase
   def setup
-    @invitation = Invitation.create(:attendees => 'Bassie, Adriaan')
+    @invitation = Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
   end
 
   def teardown
@@ -48,25 +48,12 @@ class InviteeTest < Test::Unit::TestCase
     assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
   end
 
-  it "sees an invitation page which indicates that they won't attend the wedding itself" do
-    @invitation.update_attribute(:attending_wedding, false)
+  it "sees an invitation page" do
     get "/invitations/#{@invitation.id}"
     assert last_response.ok?
     assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
-      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]', :count => 0
-      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]'
       assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
-    end
-  end
-
-  it "sees an invitation page which indicates that they will attend the wedding itself" do
-    @invitation.update_attribute(:attending_wedding, true)
-    get "/invitations/#{@invitation.id}"
-    assert last_response.ok?
-    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
-      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]'
-      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]', :count => 0
-      assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
+      assert_have_tag 'input[@name="invitation[email]"][@value="bassie@caravan.es"]'
     end
   end
 
