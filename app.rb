@@ -33,6 +33,8 @@ class Invitation < ActiveRecord::Base
   def list(str)
     str.split(",").map { |a| a.strip }
   end
+
+  validates_presence_of :attendees
 end
 
 get '/' do

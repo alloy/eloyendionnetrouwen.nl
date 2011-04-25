@@ -37,6 +37,7 @@
             <p>
               <form action="/invitations/<%= @invitation.id %>" method="post">
                 <fieldset>
+                  <%# TODO add validation error if this is empty! %>
                   <label>
                     Wij <input type="text" name="invitation[attendees]" value="<%= @invitation.attendees %>" style="width:90%;" />
                   </label>

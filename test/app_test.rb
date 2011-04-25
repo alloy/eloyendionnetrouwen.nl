@@ -2,11 +2,17 @@ require File.expand_path('../test_helper', __FILE__)
 
 class InvitationTest < Test::Unit::TestCase
   def setup
-    @invitation = Invitation.new(:attendees => 'Bassie, Adriaan')
+    @invitation = Invitation.new(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
   end
 
   def teardown
     Invitation.delete_all
+  end
+
+  it "is invalid without any attendees" do
+    assert @invitation.valid?
+    @invitation.attendees = ''
+    assert !@invitation.valid?
   end
 
   it "cleans the whitespace between the names" do
