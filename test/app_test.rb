@@ -47,8 +47,8 @@ class InviteeTest < Test::Unit::TestCase
     get "/invitations/#{@invitation.id}"
     assert last_response.ok?
     assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
-      assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]', :count => 0
-      assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]'
+      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]', :count => 0
+      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]'
       assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
     end
   end
@@ -58,26 +58,54 @@ class InviteeTest < Test::Unit::TestCase
     get "/invitations/#{@invitation.id}"
     assert last_response.ok?
     assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
-      assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]'
-      assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]', :count => 0
+      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="1"][@checked=checked]'
+      #assert_have_tag 'input[@name="invitation[attending_wedding]"][@value="0"][@checked=checked]', :count => 0
       assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
     end
   end
 
-  it "confirms who will be attending and that they will attend the wedding itself" do
-    post "/invitations/#{@invitation.id}", :invitation => { :attending_wedding => '1', :attendees => 'Bassie, Adriaan' }
-    assert last_response.redirect?
-    assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
-    assert @invitation.reload.attending_wedding?
+  it "confirms who will be attending" do
+    update_invitation :attendees => 'Bassie, Adriaan'
     assert_equal %w{ Bassie Adriaan }, @invitation.attendees_list
+    update_invitation :attendees => 'Bassie'
+    assert_equal %w{ Bassie }, @invitation.attendees_list
   end
 
-  it "confirms who will be attending and they won't attend the wedding itself" do
-    post "/invitations/#{@invitation.id}", :invitation => { :attending_wedding => '0', :attendees => 'Bassie' }
+  it "confirms if they'll attend the wedding itself" do
+    update_invitation :attending_wedding => '0'
+    assert !@invitation.attending_wedding?
+    update_invitation :attending_wedding => '1'
+    assert @invitation.attending_wedding?
+  end
+
+  it "confirms if they'll attend the party" do
+    update_invitation :attending_party => '0'
+    assert !@invitation.attending_party?
+    update_invitation :attending_party => '1'
+    assert @invitation.attending_party?
+  end
+
+  it "confirms if they'll attend dinner" do
+    update_invitation :attending_dinner => '0'
+    assert !@invitation.attending_dinner?
+    update_invitation :attending_dinner => '1'
+    assert @invitation.attending_dinner?
+  end
+
+  it "confirms if they want a vegetarian dinner" do
+    update_invitation :vegetarian_dinner => '0'
+    assert !@invitation.vegetarian_dinner?
+    update_invitation :vegetarian_dinner => '1'
+    assert @invitation.vegetarian_dinner?
+  end
+
+  private
+
+  def update_invitation(invitation_attributes)
+    post "/invitations/#{@invitation.id}", :invitation => invitation_attributes
     assert last_response.redirect?
     assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
-    assert !@invitation.reload.attending_wedding?
-    assert_equal %w{ Bassie }, @invitation.attendees_list
+    @invitation.reload
   end
 end
 

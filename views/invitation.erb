@@ -45,12 +45,14 @@
 
                   <br/>
 
+                  <input type="hidden" name="invitation[attending_wedding]" value="0" />
                   <label>
                     <input type="checkbox" name="invitation[attending_wedding]" value="1" />
                     zijn om 13:30 bij de bruiloft in de Stopera aanwezig
                   </label>
                   <br/>
 
+                  <input type="hidden" name="invitation[attending_party]" value="0" />
                   <label>
                     <input type="checkbox" id="attending_party" name="invitation[attending_party]" value="1" />
                     we feesten vanaf 15:00 mee in het Flevopark
@@ -59,6 +61,7 @@
 
                   <%# TODO Only show this if the invitee has indicated they will join the party %>
                   <div id="dinner">
+                    <input type="hidden" name="invitation[attending_dinner]" value="0" />
                     <label>
                       <input type="checkbox" name="invitation[attending_dinner]" value="1" />
                       lekker, aan de BBQ om 18:00 doen we mee
@@ -66,6 +69,7 @@
                     <br/>
 
                     <div id="vegetarian_dinner">
+                      <input type="hidden" name="invitation[vegetarian_dinner]" value="0" />
                       <label>
                         <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" />
                         maar wel vegetarisch!
