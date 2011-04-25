@@ -55,11 +55,15 @@
                   <br/>
 
                   <div id="dinner">
-                    <%= checkbox :attending_dinner, 'lekker, aan de BBQ om 18:00 doen we mee' %>
+                    <%= checkbox :attending_dinner, 'Lekker, aan de BBQ om 18:00 doen we ook mee!' %>
                     <br/>
 
-                    <div id="vegetarian_dinner">
-                      <%= checkbox :vegetarian_dinner, 'maar wel vegetarisch!' %>
+                    <div id="vegetarian_dinner" style="margin-left:16px;">
+                      <label>
+                        Maar wel graag vegetarisch voor
+                        <input type="text" name="invitation[vegetarians]" value="0" style="width:16px;" />
+                        personen.
+                      </label>
                       <br/>
                     </div>
                   </div>

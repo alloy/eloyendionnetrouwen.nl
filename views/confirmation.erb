@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=550, maximum-scale=1.0"/>
     <meta name="description" content="Here comes the title"/>
-    <title><%= @invitation.attendees_sentence %>, komen jullie ook op de bruiloft van Eloy &amp; Dionne?</title>
+    <title>Controleer gegevens</title>
     <link rel="stylesheet" href="../../css/reset.css" type="text/css"/>
     <link rel="stylesheet" href="../../css/screen.css" type="text/css"/>
     <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../../css/iphone.css" type="text/css"/>
@@ -31,28 +31,28 @@
           <hr/>
           <div id="content">
             <% if @invitation.attending? %>
-              <p>
-                Op 1 juni zijn
-                <% if @invitation.attending_party? %>
-                  aanwezig op <%= ' de bruiloft en' if @invitation.attending_wedding? %> het feest,
-                  <% if @invitation.attending_dinner? %>
-                    <%= "en eten#{' vegetarisch' if @invitation.vegetarian_dinner?} mee" %>,
-                  <% else %>
-                    maar eten niet mee,
-                  <% end %>
+              <ul>
+                <li><%= @invitation.attendees_sentence %></li>
+                <% if @invitation.attending_wedding? && @invitation.attending_party? %>
+                  <li>Zijn aanwezig op de bruiloft en het feest</li>
                 <% else %>
-                  op de bruiloft aanwezig, maar niet op het feest
+                  <li>Zijn alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
                 <% end %>
-                de volgende personen: <%= @invitation.attendees_sentence %>.
-              </p>
+                <% if @invitation.attending_dinner? %>
+                  <li>2 gasten maken gebruik van de vlees BBQ</li>
+                  <li>3 gasten maken gebruik van de vegetarische BBQ</li>
+                <% end %>
+              </ul>
 
               <form>
-                <input type="submit" value="✓ Klopt als een bus!" />
+                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
+                <input type="submit" value="Klopt als een bus!" />
               </form>
 
             <% else %>
               <form>
-                <input type="submit" value="✓ Op 1 juni zijn wij er helaas niet bij." />
+                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
+                <input type="submit" value="Op 1 juni zijn wij er helaas niet bij." />
               </form>
             <% end %>
            </div>

@@ -234,6 +234,12 @@ h2,h3,h4,h5,h6
   line-height:100%;
 }
 
+ul
+{
+  list-style-type:disc;
+  margin-left:20px;
+}
+
 ul.columns
 {
   -moz-column-gap:20px;
