@@ -47,14 +47,14 @@
 
                   <input type="hidden" name="invitation[attending_wedding]" value="0" />
                   <label>
-                    <input type="checkbox" name="invitation[attending_wedding]" value="1" />
+                    <input type="checkbox" name="invitation[attending_wedding]" value="1" <%= 'checked="checked"' if @invitation.attending_wedding? %> />
                     zijn om 13:30 bij de bruiloft in de Stopera aanwezig
                   </label>
                   <br/>
 
                   <input type="hidden" name="invitation[attending_party]" value="0" />
                   <label>
-                    <input type="checkbox" id="attending_party" name="invitation[attending_party]" value="1" />
+                    <input type="checkbox" id="attending_party_input" name="invitation[attending_party]" value="1" <%= 'checked="checked"' if @invitation.attending_party? %> />
                     we feesten vanaf 15:00 mee in het Flevopark
                   </label>
                   <br/>
@@ -63,7 +63,7 @@
                   <div id="dinner">
                     <input type="hidden" name="invitation[attending_dinner]" value="0" />
                     <label>
-                      <input type="checkbox" name="invitation[attending_dinner]" value="1" />
+                      <input type="checkbox" id="attending_dinner_input" name="invitation[attending_dinner]" value="1" <%= 'checked="checked"' if @invitation.attending_dinner? %> />
                       lekker, aan de BBQ om 18:00 doen we mee
                     </label>
                     <br/>
@@ -71,7 +71,7 @@
                     <div id="vegetarian_dinner">
                       <input type="hidden" name="invitation[vegetarian_dinner]" value="0" />
                       <label>
-                        <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" />
+                        <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" <%= 'checked="checked"' if @invitation.vegetarian_dinner? %> />
                         maar wel vegetarisch!
                       </label>
                       <br/>
@@ -93,12 +93,16 @@
             </p>
 
             <script type="text/javascript">
+              var attending_party_input = $('#attending_party_input');
               var attending_dinner = $('#dinner');
+              var attending_dinner_input = $('#attending_dinner_input');
               var vegetarian_dinner = $('#vegetarian_dinner');
-              attending_dinner.hide();
-              vegetarian_dinner.hide();
-              $('#attending_party').bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
-              attending_dinner.find('input').first().bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
+
+              attending_dinner_input.bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
+              attending_dinner_input.attr('checked') ? vegetarian_dinner.show() : vegetarian_dinner.hide();
+
+              attending_party_input.bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
+              attending_party_input.attr('checked') ? attending_dinner.show() : attending_dinner.hide();
             </script>
 
           </div>
