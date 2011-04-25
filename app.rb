@@ -57,6 +57,10 @@ class Invitation < ActiveRecord::Base
 end
 
 helpers do
+  def update_invitation_form_tag
+    %{<form action="/invitations/#{@invitation.id}" method="post">}
+  end
+
   def textfield(attr, style)
     %{<input type="text" name="invitation[#{attr}]" value="#{@invitation.send(attr)}" #{'class="error"' unless @invitation.errors[attr].empty?} style="#{style}" />}
   end
@@ -86,7 +90,11 @@ end
 post '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
   if @invitation.update_attributes(params[:invitation])
-    redirect to("/invitations/#{id}/confirm")
+    if @invitation.confirmed?
+      redirect to("/invitations/#{id}")
+    else
+      redirect to("/invitations/#{id}/confirm")
+    end
   else
     erb :invitation
   end

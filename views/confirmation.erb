@@ -47,19 +47,13 @@
                   <% end %>
                 <% end %>
               </ul>
-
-              <form>
-                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
-                <input type="submit" value="Klopt als een bus!" />
-              </form>
-
-            <% else %>
-              <form>
-                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
-                <input type="submit" value="Op 1 juni zijn wij er helaas niet bij." />
-              </form>
             <% end %>
-           </div>
+
+            <%= update_invitation_form_tag %>
+              <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
+              <input type="hidden" name="invitation[confirmed]" value="1" />
+              <input type="submit" value="<%= @invitation.attending? ? "Klopt als een bus!" : "Op 1 juni zijn wij er helaas niet bij."%>" />
+            </form>
           <hr/>
         </div>
       </div>

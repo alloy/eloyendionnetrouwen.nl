@@ -142,14 +142,29 @@ class InviteeTest < Test::Unit::TestCase
   it "sees a confirmation page" do
     get "/invitations/#{@invitation.id}/confirm"
     assert last_response.ok?
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
+      assert_have_tag 'input[@name="invitation[confirmed]"][@value="1"]'
+    end
+  end
+
+  it "confirms the invitation" do
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    assert @invitation.confirmed?
+  end
+
+  it "shows a confirmed invitation page" do
+    @invitation.update_attribute(:confirmed, true)
+    get "/invitations/#{@invitation.id}"
+    assert last_response.ok?
+    assert_have_tag "form", :count => 0
   end
 
   private
 
-  def update_invitation(invitation_attributes)
+  def update_invitation(invitation_attributes, redirect_to = nil)
     post "/invitations/#{@invitation.id}", :invitation => invitation_attributes
     assert last_response.redirect?
-    assert_equal "http://example.org/invitations/#{@invitation.id}/confirm", last_response.headers['Location']
+    assert_equal(redirect_to || "http://example.org/invitations/#{@invitation.id}/confirm", last_response.headers['Location'])
     @invitation.reload
   end
 end

@@ -27,82 +27,109 @@
             </ul>
             <hr class="right"/>
           </div>
-          <h2><%= @invitation.attendees_sentence %>, komen jullie ook?</h2>
-          <hr/>
-          <div id="content">
-            <p>Eloy en Dionne trouwen en zouden jullie er graag bij hebben!</p>
-
-            <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of laat alle vakjes leeg indien jullie helemaal niet kunnen.</p>
-
-            <hr/>
-
-            <p>
-              <% unless @invitation.valid? %>
-                <div class="errors">
-                  <ul>
-                    <% @invitation.errors.each do |attr, message| %>
-                      <li><%= message %></li>
+          <% if @invitation.confirmed? %>
+            <% if @invitation.attending? %>
+              <h2>Leuk dat jullie komen!</h2>
+              <hr/>
+              <div id="content">
+                <ul>
+                  <li><%= @invitation.attendees_sentence %></li>
+                  <% if @invitation.attending_wedding? && @invitation.attending_party? %>
+                    <li>Zijn aanwezig op de bruiloft en het feest</li>
+                  <% else %>
+                    <li>Zijn alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
+                  <% end %>
+                  <% if @invitation.attending_dinner? %>
+                    <% if (omnivores = @invitation.omnivores) > 0 %>
+                      <li><%= omnivores %> gasten maken gebruik van de vlees BBQ</li>
                     <% end %>
-                  </ul>
-                </div>
-              <% end %>
-              <form action="/invitations/<%= @invitation.id %>" method="post">
-                <fieldset>
-                  <%# TODO add validation error if this is empty! %>
-                  <label>
-                    Wij <%= textfield :attendees, "width:90%;" %>
-                  </label>
-                  <span class="small">Scheidt de namen met een komma.</span>
-                  <br/>
+                    <% if @invitation.vegetarians > 0 %>
+                      <li><%= @invitation.vegetarians %> gasten maken gebruik van de vegetarische BBQ</li>
+                    <% end %>
+                  <% end %>
+                </ul>
+              </div>
+            <% else %>
+              <h2>Jammer dat jullie niet kunnen komen.</h2>
+            <% end %>
+          <% else %>
+            <h2><%= @invitation.attendees_sentence %>, komen jullie ook?</h2>
+            <hr/>
+            <div id="content">
+              <p>Eloy en Dionne trouwen en zouden jullie er graag bij hebben!</p>
 
-                  <br/>
+              <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of laat alle vakjes leeg indien jullie helemaal niet kunnen.</p>
 
-                  <%= checkbox :attending_wedding, 'zijn om 13:30 bij de bruiloft in de Stopera aanwezig' %>
-                  <br/>
+              <hr/>
 
-                  <%= checkbox :attending_party, 'we feesten vanaf 15:00 mee in het Flevopark' %>
-                  <br/>
+              <p>
+                <% unless @invitation.valid? %>
+                  <div class="errors">
+                    <ul>
+                      <% @invitation.errors.each do |attr, message| %>
+                        <li><%= message %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
 
-                  <div id="dinner">
-                    <%= checkbox :attending_dinner, 'Lekker, aan de BBQ om 18:00 doen we ook mee!' %>
+                <%= update_invitation_form_tag %>
+                  <fieldset>
+                    <%# TODO add validation error if this is empty! %>
+                    <label>
+                      Wij <%= textfield :attendees, "width:90%;" %>
+                    </label>
+                    <span class="small">Scheidt de namen met een komma.</span>
                     <br/>
 
-                    <div id="vegetarian_dinner" style="margin-left:16px;">
-                      <label>
-                        Maar wel graag vegetarisch voor <%= textfield :vegetarians, "width:16px;" %> personen.
-                      </label>
+                    <br/>
+
+                    <%= checkbox :attending_wedding, 'zijn om 13:30 bij de bruiloft in de Stopera aanwezig' %>
+                    <br/>
+
+                    <%= checkbox :attending_party, 'we feesten vanaf 15:00 mee in het Flevopark' %>
+                    <br/>
+
+                    <div id="dinner">
+                      <%= checkbox :attending_dinner, 'Lekker, aan de BBQ om 18:00 doen we ook mee!' %>
                       <br/>
+
+                      <div id="vegetarian_dinner" style="margin-left:16px;">
+                        <label>
+                          Maar wel graag vegetarisch voor <%= textfield :vegetarians, "width:16px;" %> personen.
+                        </label>
+                        <br/>
+                      </div>
                     </div>
-                  </div>
 
-                  <br/>
+                    <br/>
 
-                  <label>
-                    Zodra er meer informatie beschikbaar is laat het ons dan weten op het volgende email adres: <input type="text" name="invitation[email]" value="<%= @invitation.email %>" style="width:56%;" />
-                  </label>
-                  <br/>
+                    <label>
+                      Zodra er meer informatie beschikbaar is laat het ons dan weten op het volgende email adres: <input type="text" name="invitation[email]" value="<%= @invitation.email %>" style="width:56%;" />
+                    </label>
+                    <br/>
 
-                  <br/>
+                    <br/>
 
-                  <input type="submit" value="Nu nog even controleren &rarr;" />
-                </fieldset>
-              </form>
-            </p>
+                    <input type="submit" value="Nu nog even controleren &rarr;" />
+                  </fieldset>
+                </form>
+              </p>
 
-            <script type="text/javascript">
-              var attending_party_input = $('#attending_party_input');
-              var attending_dinner = $('#dinner');
-              var attending_dinner_input = $('#attending_dinner_input');
-              var vegetarian_dinner = $('#vegetarian_dinner');
+              <script type="text/javascript">
+                var attending_party_input = $('#attending_party_input');
+                var attending_dinner = $('#dinner');
+                var attending_dinner_input = $('#attending_dinner_input');
+                var vegetarian_dinner = $('#vegetarian_dinner');
 
-              attending_dinner_input.bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
-              attending_dinner_input.attr('checked') ? vegetarian_dinner.show() : vegetarian_dinner.hide();
+                attending_dinner_input.bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
+                attending_dinner_input.attr('checked') ? vegetarian_dinner.show() : vegetarian_dinner.hide();
 
-              attending_party_input.bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
-              attending_party_input.attr('checked') ? attending_dinner.show() : attending_dinner.hide();
-            </script>
+                attending_party_input.bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
+                attending_party_input.attr('checked') ? attending_dinner.show() : attending_dinner.hide();
+              </script>
+            <% end %>
 
-          </div>
           <hr/>
         </div>
       </div>
