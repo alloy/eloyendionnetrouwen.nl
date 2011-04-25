@@ -27,13 +27,35 @@
             </ul>
             <hr class="right"/>
           </div>
-          <h2><%= @invitation.attending? ? "Leuk dat jullie komen!" : "Jammer dat jullie niet komen…" %></h2>
+          <h2>Controleer onderstaande gegevens</h2>
           <hr/>
           <div id="content">
-            <p>
-              “”
-            </p>
-          </div>
+            <% if @invitation.attending? %>
+              <p>
+                Op 1 juni zijn
+                <% if @invitation.attending_party? %>
+                  aanwezig op <%= ' de bruiloft en' if @invitation.attending_wedding? %> het feest,
+                  <% if @invitation.attending_dinner? %>
+                    <%= "en eten#{' vegetarisch' if @invitation.vegetarian_dinner?} mee" %>,
+                  <% else %>
+                    maar eten niet mee,
+                  <% end %>
+                <% else %>
+                  op de bruiloft aanwezig, maar niet op het feest
+                <% end %>
+                de volgende personen: <%= @invitation.attendees_sentence %>.
+              </p>
+
+              <form>
+                <input type="submit" value="✓ Klopt als een bus!" />
+              </form>
+
+            <% else %>
+              <form>
+                <input type="submit" value="✓ Op 1 juni zijn wij er helaas niet bij." />
+              </form>
+            <% end %>
+           </div>
           <hr/>
         </div>
       </div>
