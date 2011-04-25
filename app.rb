@@ -28,6 +28,10 @@ class Invitation < ActiveRecord::Base
     end
   end
 
+  def attending?
+    attending_wedding? || attending_party?
+  end
+
   private
 
   def list(str)
@@ -35,6 +39,16 @@ class Invitation < ActiveRecord::Base
   end
 
   validates_presence_of :attendees
+end
+
+helpers do
+  def checkbox(attr, label)
+    %{<input type="hidden" name="invitation[#{attr}]" value="0" />
+      <label>
+        <input type="checkbox" id="#{attr}_input" name="invitation[#{attr}]" value="1" #{'checked="checked"' if @invitation.send(attr)} />
+        #{label}
+      </label>}
+  end
 end
 
 get '/' do
@@ -53,5 +67,10 @@ end
 post '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
   @invitation.update_attributes(params[:invitation])
-  redirect to("/invitations/#{id}")
+  redirect to("/invitations/#{id}/confirm")
+end
+
+get '/invitations/:id/confirm' do |id|
+  @invitation = Invitation.find(id)
+  erb :confirmation
 end

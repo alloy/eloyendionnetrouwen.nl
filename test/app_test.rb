@@ -31,6 +31,18 @@ class InvitationTest < Test::Unit::TestCase
     @invitation.attendees = 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka'
     assert_equal 'Rini, Sander, Mats, Mila, Nena, Jacky en Yuka', @invitation.attendees_sentence
   end
+
+  it "returns wether or not they will attend at all" do
+    assert !@invitation.attending?
+    @invitation.attending_wedding = true
+    assert @invitation.attending?
+    @invitation.attending_party = true
+    assert @invitation.attending?
+    @invitation.attending_wedding = false
+    assert @invitation.attending?
+    @invitation.attending_party = false
+    assert !@invitation.attending?
+  end
 end
 
 class InviteeTest < Test::Unit::TestCase
@@ -92,12 +104,17 @@ class InviteeTest < Test::Unit::TestCase
     assert @invitation.vegetarian_dinner?
   end
 
+  it "sees a confirmation page" do
+    get "/invitations/#{@invitation.id}/confirm"
+    assert last_response.ok?
+  end
+
   private
 
   def update_invitation(invitation_attributes)
     post "/invitations/#{@invitation.id}", :invitation => invitation_attributes
     assert last_response.redirect?
-    assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
+    assert_equal "http://example.org/invitations/#{@invitation.id}/confirm", last_response.headers['Location']
     @invitation.reload
   end
 end

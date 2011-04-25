@@ -34,6 +34,8 @@
 
             <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of laat alle vakjes leeg indien jullie helemaal niet kunnen.</p>
 
+            <hr/>
+
             <p>
               <form action="/invitations/<%= @invitation.id %>" method="post">
                 <fieldset>
@@ -46,35 +48,18 @@
 
                   <br/>
 
-                  <input type="hidden" name="invitation[attending_wedding]" value="0" />
-                  <label>
-                    <input type="checkbox" name="invitation[attending_wedding]" value="1" <%= 'checked="checked"' if @invitation.attending_wedding? %> />
-                    zijn om 13:30 bij de bruiloft in de Stopera aanwezig
-                  </label>
+                  <%= checkbox :attending_wedding, 'zijn om 13:30 bij de bruiloft in de Stopera aanwezig' %>
                   <br/>
 
-                  <input type="hidden" name="invitation[attending_party]" value="0" />
-                  <label>
-                    <input type="checkbox" id="attending_party_input" name="invitation[attending_party]" value="1" <%= 'checked="checked"' if @invitation.attending_party? %> />
-                    we feesten vanaf 15:00 mee in het Flevopark
-                  </label>
+                  <%= checkbox :attending_party, 'we feesten vanaf 15:00 mee in het Flevopark' %>
                   <br/>
 
-                  <%# TODO Only show this if the invitee has indicated they will join the party %>
                   <div id="dinner">
-                    <input type="hidden" name="invitation[attending_dinner]" value="0" />
-                    <label>
-                      <input type="checkbox" id="attending_dinner_input" name="invitation[attending_dinner]" value="1" <%= 'checked="checked"' if @invitation.attending_dinner? %> />
-                      lekker, aan de BBQ om 18:00 doen we mee
-                    </label>
+                    <%= checkbox :attending_dinner, 'lekker, aan de BBQ om 18:00 doen we mee' %>
                     <br/>
 
                     <div id="vegetarian_dinner">
-                      <input type="hidden" name="invitation[vegetarian_dinner]" value="0" />
-                      <label>
-                        <input type="checkbox" name="invitation[vegetarian_dinner]" value="1" <%= 'checked="checked"' if @invitation.vegetarian_dinner? %> />
-                        maar wel vegetarisch!
-                      </label>
+                      <%= checkbox :vegetarian_dinner, 'maar wel vegetarisch!' %>
                       <br/>
                     </div>
                   </div>
