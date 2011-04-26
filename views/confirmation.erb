@@ -44,19 +44,21 @@
           <div id="content">
             <% if @invitation.attending? %>
               <ul>
-                <li><%= @invitation.attendees_sentence %></li>
+                <li><%= @invitation.attendees_sentence %>.</li>
                 <% if @invitation.attending_wedding? && @invitation.attending_party? %>
-                  <li><%= address 'Is', 'Zijn' %> aanwezig op de bruiloft en het feest</li>
+                  <li><%= address 'Is', 'Zijn' %> aanwezig op de bruiloft en het feest.</li>
                 <% else %>
                   <li><%= address 'Is', 'Zijn' %> alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
                 <% end %>
                 <% if @invitation.attending_dinner? %>
                   <% if (omnivores = @invitation.omnivores) > 0 %>
-                    <li><%= omnivores %> <%= address 'persoon maakt', "personen maken", omnivores %> gebruik van de vlees BBQ</li>
+                    <li><%= omnivores %> <%= address 'persoon maakt', "personen maken", omnivores %> gebruik van de vlees BBQ.</li>
                   <% end %>
                   <% if (vegetarians = @invitation.vegetarians) > 0 %>
-                    <li><%= vegetarians %> <%= address 'persoon maakt', "personen maken", vegetarians %> gebruik van de vegetarische BBQ</li>
+                    <li><%= vegetarians %> <%= address 'persoon maakt', "personen maken", vegetarians %> gebruik van de vegetarische BBQ.</li>
                   <% end %>
+                <% else %>
+                  <li><%= address 'Je maakt', 'Jullie maken' %> geen gebruik van de BBQ</li>
                 <% end %>
               </ul>
             <% end %>

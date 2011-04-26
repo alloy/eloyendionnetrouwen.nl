@@ -67,6 +67,14 @@ class InvitationTest < Test::Unit::TestCase
     @invitation.vegetarians = 2
     assert_equal 0, @invitation.omnivores
   end
+
+  it "ensures that attending_party is set if the attendee attends the dinner, but not the reverse" do
+    assert !@invitation.attending_party?
+    @invitation.update_attributes :attending_dinner => true, :attending_party => false
+    assert @invitation.reload.attending_party?
+    @invitation.update_attributes :attending_dinner => false
+    assert @invitation.reload.attending_party?
+  end
 end
 
 class InviteeTest < Test::Unit::TestCase

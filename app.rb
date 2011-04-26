@@ -11,16 +11,22 @@ require 'logger'
 ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
 class Invitation < ActiveRecord::Base
+  before_save :ensure_attending_party_if_attending_dinner
+
   def vegetarians=(amount)
-    write_attribute :vegetarians, amount.to_i
+    write_attribute(:vegetarians, amount.to_i)
   end
 
   def omnivores
     attendees_list.size - vegetarians
   end
 
+  def ensure_attending_party_if_attending_dinner
+    self.attending_party = true if attending_dinner?
+  end
+
   def attendees=(attendees)
-    write_attribute :attendees, list(attendees).reject(&:empty?).join(", ")
+    write_attribute(:attendees, list(attendees).reject(&:empty?).join(", "))
   end
 
   def attendees_list
