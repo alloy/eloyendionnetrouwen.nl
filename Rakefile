@@ -17,7 +17,7 @@ namespace :db do
     end
   end
 
-  task :seed do
+  task :seed => 'db:migrate:development' do
     require 'app'
     p Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').id
     p Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').id
