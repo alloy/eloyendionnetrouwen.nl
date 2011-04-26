@@ -1,48 +1,8 @@
 require File.expand_path('../test_helper', __FILE__)
 
-require 'net/smtp'
-module Net
-  class SMTP
-    class Mock
-      Email = Struct.new(:message, :from, :to)
-
-      def sent_emails
-        @sent_emails ||= []
-      end
-
-      def send_message(message, from, to)
-        sent_emails << Email.new(message, from, to)
-      end
-    end
-
-    class << self
-      def smtp_mock
-        @smtp_mock ||= Mock.new
-      end
-
-      def reset!
-        @smtp_mock = nil
-      end
-
-      def sent_emails
-        smtp_mock.sent_emails
-      end
-
-      def start(*)
-        yield smtp_mock
-      end
-    end
-  end
-end
-
 class InvitationTest < Test::Unit::TestCase
   def setup
     @invitation = Invitation.new(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
-  end
-
-  def teardown
-    Invitation.delete_all
-    Net::SMTP.reset!
   end
 
   it "is invalid without any attendees" do

@@ -23,4 +23,25 @@ module Helpers
         #{label}
       </label>}
   end
+
+  def summary
+    result = []
+    result << "#{@invitation.attendees_sentence}."
+    if @invitation.attending_wedding? && @invitation.attending_party?
+      result << "#{address 'Is', 'Zijn'} aanwezig op de bruiloft en het feest."
+    else
+      result << "#{address 'Is', 'Zijn'} alleen aanwezig op #{@invitation.attending_wedding? ? 'de bruiloft' : 'het feest'}."
+    end
+    if @invitation.attending_dinner?
+      if (omnivores = @invitation.omnivores) > 0
+        result << "#{omnivores} #{address 'persoon maakt', "personen maken", omnivores} gebruik van de vlees BBQ."
+      end
+      if (vegetarians = @invitation.vegetarians) > 0
+        result << "#{vegetarians} #{address 'persoon maakt', "personen maken", vegetarians} gebruik van de vegetarische BBQ."
+      end
+    else
+      result << "#{address 'Je maakt', 'Jullie maken'} geen gebruik van de BBQ."
+    end
+    result
+  end
 end

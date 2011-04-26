@@ -5,10 +5,6 @@ class InviteeTest < Test::Unit::TestCase
     @invitation = Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
   end
 
-  def teardown
-    Invitation.delete_all
-  end
-
   it "is redirected to the actual invitation page" do
     get "/#{@invitation.id}"
     assert last_response.redirect?
@@ -78,9 +74,25 @@ class InviteeTest < Test::Unit::TestCase
     end
   end
 
-  it "confirms the invitation" do
+  it "confirms that they will come" do
+    @invitation.update_attribute(:attending_wedding, true)
     update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
     assert @invitation.confirmed?
+    emails = Net::SMTP.sent_emails
+    assert_equal 1, emails.size
+    assert_equal FROM_EMAIL, emails[0].from
+    assert_equal @invitation.email, emails[0].to
+    assert emails[0].message.include?('Leuk')
+  end
+
+  it "confirms that they will not come" do
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    assert @invitation.confirmed?
+    emails = Net::SMTP.sent_emails
+    assert_equal 1, emails.size
+    assert_equal FROM_EMAIL, emails[0].from
+    assert_equal @invitation.email, emails[0].to
+    assert emails[0].message.include?('Jammer')
   end
 
   it "shows a confirmed invitation page" do

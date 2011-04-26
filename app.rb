@@ -1,6 +1,7 @@
 require 'config'
 require 'invitation'
 require 'helpers'
+require 'mailer'
 
 helpers do
   include Helpers
@@ -28,6 +29,7 @@ post '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
   if @invitation.update_attributes(params[:invitation])
     if @invitation.confirmed?
+      Mailer.send_confirmation(@invitation)
       redirect to("/invitations/#{id}")
     else
       redirect to("/invitations/#{id}/confirm")
