@@ -57,6 +57,11 @@ class Invitation < ActiveRecord::Base
 end
 
 helpers do
+  def address(singular_form, plural_form, amount = nil)
+    amount ||= @invitation.attendees_list.size
+    amount == 1 ? singular_form : plural_form
+  end
+
   def update_invitation_form_tag
     %{<form action="/invitations/#{@invitation.id}" method="post">}
   end
@@ -88,7 +93,12 @@ end
 
 get '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
-  erb :invitation
+  erb(@invitation.confirmed? ? :confirmation : :invitation)
+end
+
+get '/invitations/:id/confirm' do |id|
+  @invitation = Invitation.find(id)
+  erb :confirmation
 end
 
 post '/invitations/:id' do |id|
@@ -102,9 +112,4 @@ post '/invitations/:id' do |id|
   else
     erb :invitation
   end
-end
-
-get '/invitations/:id/confirm' do |id|
-  @invitation = Invitation.find(id)
-  erb :confirmation
 end

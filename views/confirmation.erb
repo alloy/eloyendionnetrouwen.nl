@@ -4,7 +4,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=550, maximum-scale=1.0"/>
     <meta name="description" content="Here comes the title"/>
-    <title>Controleer gegevens</title>
+    <% if @invitation.attending? %>
+      <title>Leuk dat <%= address 'je komt', 'jullie komen' %>!</title>
+    <% else %>
+      <title>Controleer gegevens</title>
+    <% end %>
     <link rel="stylesheet" href="../../css/reset.css" type="text/css"/>
     <link rel="stylesheet" href="../../css/screen.css" type="text/css"/>
     <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../../css/iphone.css" type="text/css"/>
@@ -27,33 +31,43 @@
             </ul>
             <hr class="right"/>
           </div>
-          <h2>Klopt dit?</h2>
+          <% if @invitation.confirmed? %>
+            <% if @invitation.attending? %>
+              <h2>Leuk dat <%= address 'je komt', 'jullie komen' %>!</h2>
+            <% else %>
+              <h2>Jammer dat <%= address 'je niet kunt', 'jullie niet kunnen' %> komen.</h2>
+            <% end %>
+          <% else %>
+            <h2>Klopt dit?</h2>
+          <% end %>
           <hr/>
           <div id="content">
             <% if @invitation.attending? %>
               <ul>
                 <li><%= @invitation.attendees_sentence %></li>
                 <% if @invitation.attending_wedding? && @invitation.attending_party? %>
-                  <li>Zijn aanwezig op de bruiloft en het feest</li>
+                  <li><%= address 'Is', 'Zijn' %> aanwezig op de bruiloft en het feest</li>
                 <% else %>
-                  <li>Zijn alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
+                  <li><%= address 'Is', 'Zijn' %> alleen aanwezig op <%= @invitation.attending_wedding? ? 'de bruiloft' : 'het feest' %>.</li>
                 <% end %>
                 <% if @invitation.attending_dinner? %>
                   <% if (omnivores = @invitation.omnivores) > 0 %>
-                    <li><%= omnivores %> gasten maken gebruik van de vlees BBQ</li>
+                    <li><%= omnivores %> <%= address 'persoon maakt', "personen maken", omnivores %> gebruik van de vlees BBQ</li>
                   <% end %>
-                  <% if @invitation.vegetarians > 0 %>
-                    <li><%= @invitation.vegetarians %> gasten maken gebruik van de vegetarische BBQ</li>
+                  <% if (vegetarians = @invitation.vegetarians) > 0 %>
+                    <li><%= vegetarians %> <%= address 'persoon maakt', "personen maken", vegetarians %> gebruik van de vegetarische BBQ</li>
                   <% end %>
                 <% end %>
               </ul>
             <% end %>
 
-            <%= update_invitation_form_tag %>
-              <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
-              <input type="hidden" name="invitation[confirmed]" value="1" />
-              <input type="submit" value="<%= @invitation.attending? ? "Klopt als een bus!" : "Op 1 juni zijn wij er helaas niet bij."%>" />
-            </form>
+            <% unless @invitation.confirmed? %>
+              <%= update_invitation_form_tag %>
+                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
+                <input type="hidden" name="invitation[confirmed]" value="1" />
+                <input type="submit" value="<%= @invitation.attending? ? "Klopt als een bus!" : "Op 1 juni #{address 'ben ik', 'zijn wij'} er helaas niet bij."%>" />
+              </form>
+            <% end %>
           <hr/>
         </div>
       </div>

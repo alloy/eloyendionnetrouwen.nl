@@ -159,6 +159,16 @@ class InviteeTest < Test::Unit::TestCase
     assert_have_tag "form", :count => 0
   end
 
+  it "addresses the attendee or attendees in the proper way" do
+    get "/invitations/#{@invitation.id}"
+    assert last_response.body.include?('komen jullie')
+    assert !last_response.body.include?('kom je')
+    @invitation.update_attribute(:attendees, 'Bassie')
+    get "/invitations/#{@invitation.id}"
+    assert !last_response.body.include?('komen jullie')
+    assert last_response.body.include?('kom je')
+  end
+
   private
 
   def update_invitation(invitation_attributes, redirect_to = nil)
