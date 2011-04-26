@@ -62,7 +62,11 @@ helpers do
   end
 
   def textfield(attr, style)
-    %{<input type="text" name="invitation[#{attr}]" value="#{@invitation.send(attr)}" #{'class="error"' unless @invitation.errors[attr].empty?} style="#{style}" />}
+    error = false
+    if ary = @invitation.errors[attr]
+      error = !ary.empty?
+    end
+    %{<input type="text" name="invitation[#{attr}]" value="#{@invitation.send(attr)}" #{'class="error"' if error} style="#{style}" />}
   end
 
   def checkbox(attr, label)

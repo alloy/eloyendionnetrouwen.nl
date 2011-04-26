@@ -56,9 +56,9 @@
             <h2><%= @invitation.attendees_sentence %>, komen jullie ook?</h2>
             <hr/>
             <div id="content">
-              <p>Eloy en Dionne trouwen en zouden jullie er graag bij hebben!</p>
+              <p>Eloy en Dionne trouwen op 1 juni en zouden jullie er graag bij hebben!</p>
 
-              <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat. Dus confirmeer alsjeblieft de onderstaande lijst, of pas hem aan, en geef aan waar jullie bij aanwezig zullen zijn. Of laat alle vakjes leeg indien jullie helemaal niet kunnen.</p>
+              <p>Om het feest in goede banen te leiden is het belangrijk dat we weten wie er komen en hoe laat.</p>
 
               <hr/>
 
@@ -77,21 +77,24 @@
                   <fieldset>
                     <%# TODO add validation error if this is empty! %>
                     <label>
-                      Wij <%= textfield :attendees, "width:90%;" %>
+                      <h3>Wie komen er?</h3>
+                      <%= textfield :attendees, "width:90%;" %>
                     </label>
                     <span class="small">Scheidt de namen met een komma.</span>
                     <br/>
 
                     <br/>
 
-                    <%= checkbox :attending_wedding, 'zijn om 13:30 bij de bruiloft in de Stopera aanwezig' %>
+                    <h3>Waar zijn jullie bij aanwezig?</h3>
+
+                    <%= checkbox :attending_wedding, 'Wij zijn om 13:30 bij de bruiloft in de Stopera aanwezig' %>
                     <br/>
 
-                    <%= checkbox :attending_party, 'we feesten vanaf 15:00 mee in het Flevopark' %>
+                    <%= checkbox :attending_party, 'Wij feesten vanaf 15:00 mee in het Flevopark' %>
                     <br/>
 
                     <div id="dinner">
-                      <%= checkbox :attending_dinner, 'Lekker, aan de BBQ om 18:00 doen we ook mee!' %>
+                      <%= checkbox :attending_dinner, 'Wij doen mee aan de BBQ om 18:00' %>
                       <br/>
 
                       <div id="vegetarian_dinner" style="margin-left:16px;">
@@ -104,8 +107,12 @@
 
                     <br/>
 
+                    <p>
+                      Zodra er meer informatie beschikbaar is, zoals lokaties, dan kunnen we jullie daarvan op de hoogte stellen via een email.
+                    </p>
                     <label>
-                      Zodra er meer informatie beschikbaar is laat het ons dan weten op het volgende email adres: <input type="text" name="invitation[email]" value="<%= @invitation.email %>" style="width:56%;" />
+                      Email adres:<br/>
+                      <input type="text" name="invitation[email]" value="<%= @invitation.email %>" style="width:30%;" />
                     </label>
                     <br/>
 
@@ -117,16 +124,16 @@
               </p>
 
               <script type="text/javascript">
-                var attending_party_input = $('#attending_party_input');
-                var attending_dinner = $('#dinner');
-                var attending_dinner_input = $('#attending_dinner_input');
-                var vegetarian_dinner = $('#vegetarian_dinner');
+                <%#var attending_party_input = $('#attending_party_input');%>
+                <%#var attending_dinner = $('#dinner');%>
+                <%#var attending_dinner_input = $('#attending_dinner_input');%>
+                <%#var vegetarian_dinner = $('#vegetarian_dinner');%>
 
-                attending_dinner_input.bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });
-                attending_dinner_input.attr('checked') ? vegetarian_dinner.show() : vegetarian_dinner.hide();
+                <%#attending_dinner_input.bind('click', function() { this.checked ? vegetarian_dinner.show() : vegetarian_dinner.hide(); });%>
+                <%#attending_dinner_input.attr('checked') ? vegetarian_dinner.show() : vegetarian_dinner.hide();%>
 
-                attending_party_input.bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });
-                attending_party_input.attr('checked') ? attending_dinner.show() : attending_dinner.hide();
+                <%#attending_party_input.bind('click', function() { this.checked ? attending_dinner.show() : attending_dinner.hide(); });%>
+                <%#attending_party_input.attr('checked') ? attending_dinner.show() : attending_dinner.hide();%>
               </script>
             <% end %>
 
