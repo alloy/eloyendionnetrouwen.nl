@@ -60,6 +60,11 @@
                 <% else %>
                   <li><%= address 'Je maakt', 'Jullie maken' %> geen gebruik van de BBQ</li>
                 <% end %>
+                <% if @invitation.email.blank? %>
+                  <li>Geen email gewenst/opgegeven.</li>
+                <% else %>
+                  <li>Stuur meer informatie naar: <%= @invitation.email %></li>
+                <% end %>
               </ul>
             <% end %>
 
