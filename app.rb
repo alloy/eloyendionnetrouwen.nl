@@ -29,7 +29,7 @@ post '/invitations/:id' do |id|
   @invitation = Invitation.find(id)
   if @invitation.update_attributes(params[:invitation])
     if @invitation.confirmed?
-      Mailer.send_confirmation(@invitation)
+      Mailer.send_confirmation(@invitation) if @invitation.email
       redirect to("/invitations/#{id}")
     else
       redirect to("/invitations/#{id}/confirm")

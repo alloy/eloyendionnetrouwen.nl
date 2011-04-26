@@ -28,9 +28,9 @@ module Helpers
     result = []
     result << "#{@invitation.attendees_sentence}."
     if @invitation.attending_wedding? && @invitation.attending_party?
-      result << "#{address 'Is', 'Zijn'} aanwezig op de bruiloft en het feest."
+      result << "#{address 'Is', 'Zijn'} aanwezig op de bruiloft om 13:30 en het feest vanaf 15:00."
     else
-      result << "#{address 'Is', 'Zijn'} alleen aanwezig op #{@invitation.attending_wedding? ? 'de bruiloft' : 'het feest'}."
+      result << "#{address 'Is', 'Zijn'} alleen aanwezig op #{@invitation.attending_wedding? ? 'de bruiloft om 13:30' : 'het feest vanaf 15:00'}."
     end
     if @invitation.attending_dinner?
       if (omnivores = @invitation.omnivores) > 0

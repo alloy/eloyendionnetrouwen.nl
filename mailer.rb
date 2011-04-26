@@ -13,7 +13,7 @@ module Mailer
     class Invitation < Message
       def to_s
 <<END_OF_MESSAGE
-From: Eloy en Dionne trouwen! <#{FROM_EMAIL}>
+From: Eloy en Dionne trouwen <#{FROM_EMAIL}>
 To: <#{@invitation.email}>
 Subject: Eloy en Dionne trouwen! #{address 'Kom je', 'Komen jullie'} ook?
 
@@ -42,13 +42,13 @@ END_OF_MESSAGE
         if @invitation.attending?
           "De volgende gegevens zijn bij ons bekend:\n\n* #{summary.join("\n* ")}\n\nTot 1 juni!"
         else
-          "Zodra er foto's beschikbaar zijn laten we het je nog weten!"
+          "Zodra er foto's beschikbaar zijn laten we het je nog weten."
         end
       end
 
       def to_s
 <<END_OF_MESSAGE
-From: Eloy en Dionne trouwen! <#{FROM_EMAIL}>
+From: Eloy en Dionne trouwen <#{FROM_EMAIL}>
 To: <#{@invitation.email}>
 Subject: #{subject}
 

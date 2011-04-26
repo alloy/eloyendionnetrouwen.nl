@@ -95,6 +95,13 @@ class InviteeTest < Test::Unit::TestCase
     assert emails[0].message.include?('Jammer')
   end
 
+  it "does not send a confirmation email if there is no address" do
+    @invitation.update_attribute(:email, nil)
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    assert @invitation.confirmed?
+    assert Net::SMTP.sent_emails.empty?
+  end
+
   it "shows a confirmed invitation page" do
     @invitation.update_attribute(:confirmed, true)
     get "/invitations/#{@invitation.id}"
