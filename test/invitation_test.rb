@@ -1,5 +1,40 @@
 require File.expand_path('../test_helper', __FILE__)
 
+require 'net/smtp'
+module Net
+  class SMTP
+    class Mock
+      Email = Struct.new(:message, :from, :to)
+
+      def sent_emails
+        @sent_emails ||= []
+      end
+
+      def send_message(message, from, to)
+        sent_emails << Email.new(message, from, to)
+      end
+    end
+
+    class << self
+      def smtp_mock
+        @smtp_mock ||= Mock.new
+      end
+
+      def reset!
+        @smtp_mock = nil
+      end
+
+      def sent_emails
+        smtp_mock.sent_emails
+      end
+
+      def start(*)
+        yield smtp_mock
+      end
+    end
+  end
+end
+
 class InvitationTest < Test::Unit::TestCase
   def setup
     @invitation = Invitation.new(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
@@ -7,6 +42,7 @@ class InvitationTest < Test::Unit::TestCase
 
   def teardown
     Invitation.delete_all
+    Net::SMTP.reset!
   end
 
   it "is invalid without any attendees" do
@@ -74,5 +110,40 @@ class InvitationTest < Test::Unit::TestCase
     assert @invitation.reload.attending_party?
     @invitation.update_attributes :attending_dinner => false
     assert @invitation.reload.attending_party?
+  end
+
+  it "sanitizes the email address to not be empty" do
+    @invitation.email = ""
+    assert_nil @invitation.email
+    @invitation.email = "  "
+    assert_nil @invitation.email
+    @invitation.email = "\t  \n  "
+    assert_nil @invitation.email
+  end
+
+  it "sends invitation emails to those that have not received one yet and have an email address" do
+    invitation1 = Invitation.create!(:attendees => 'Bassie', :email => 'bassie@caravan.es')
+    invitation2 = Invitation.create!(:attendees => 'Rogier, Fransje', :email => 'rogier@example.org')
+    invitation3 = Invitation.create!(:attendees => 'Tomas, Daphne', :email => 'tomas@example.org', :sent => true)
+    invitation4 = Invitation.create!(:attendees => 'Opa, Oma', :email => '')
+    Invitation.send_invitations!
+    [invitation1, invitation2, invitation3, invitation4].each(&:reload)
+    emails = Net::SMTP.sent_emails
+
+    assert_equal 2, emails.size
+
+    assert invitation1.sent?
+    assert_equal FROM_EMAIL, emails[0].from
+    assert_equal invitation1.email, emails[0].to
+    assert emails[0].message.include?("Bassie,")
+    assert emails[0].message.include?("http://eloyendionnetrouwen.nl/#{invitation1.id}")
+
+    assert invitation2.sent?
+    assert_equal FROM_EMAIL, emails[1].from
+    assert_equal invitation2.email, emails[1].to
+    assert emails[1].message.include?("Rogier en Fransje,")
+    assert emails[1].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.id}")
+
+    assert !invitation4.sent?
   end
 end

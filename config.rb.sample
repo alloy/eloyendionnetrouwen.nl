@@ -10,5 +10,9 @@ set :root, File.expand_path('../', __FILE__)
 require 'logger'
 ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
 
+FROM_EMAIL = 'info@eloyendionnetrouwen.nl'
+SMTP_HELO = 'eloyendionnetrouwen.nl'
+SMTP_HOST = 'mail.authsmtp.com'
+SMTP_PORT = 2525
 SMTP_USER = 'bob'
 SMTP_PASS = 'secret'

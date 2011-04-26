@@ -3,6 +3,8 @@ class CreateInvitations < ActiveRecord::Migration
     create_table :invitations do |t|
       t.string :email
       t.string :attendees
+      t.boolean :sent, :default => false
+      t.boolean :english, :default => false
       t.boolean :attending_wedding, :default => false
       t.boolean :attending_party, :default => false
       t.boolean :attending_dinner, :default => false

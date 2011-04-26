@@ -1,7 +1,52 @@
 require 'config'
+require 'helpers'
 
 class Invitation < ActiveRecord::Base
+  class EmailMessage
+    include Helpers
+
+    def initialize(invitation)
+      @invitation = invitation
+    end
+
+    def to_s
+<<END_OF_MESSAGE
+From: Eloy en Dionne trouwen! <#{FROM_EMAIL}>
+To: <#{@invitation.email}>
+Subject: Eloy en Dionne trouwen! #{address 'Kom je', 'Komen jullie'} ook?
+
+Hoi #{@invitation.attendees_sentence},
+
+Eloy en Dionne trouwen op 1 juni en zouden #{address 'jou', 'jullie'} er graag bij hebben!
+Klik op onderstaande link om aan te geven of en wanneer #{address 'je komt', 'jullie komen'}:
+
+  http://eloyendionnetrouwen.nl/#{@invitation.id}
+
+Hopelijk tot dan!
+END_OF_MESSAGE
+    end
+  end
+
+  def self.send_invitations!
+    require 'net/smtp'
+    Net::SMTP.start(SMTP_HOST, SMTP_PORT, SMTP_HELO, SMTP_USER, SMTP_PASS, :cram_md5) do |smtp|
+      where(:sent => false).where(arel_table[:email].not_eq(nil)).each do |invitation|
+        message = EmailMessage.new(invitation).to_s
+        logger.info(message)
+        smtp.send_message(message, FROM_EMAIL, invitation.email)
+        invitation.update_attribute(:sent, true)
+      end
+    end
+  end
+
   before_save :ensure_attending_party_if_attending_dinner
+
+  def email=(address)
+    if address && address.strip.empty?
+      address = nil
+    end
+    write_attribute(:email, address)
+  end
 
   def vegetarians=(amount)
     write_attribute(:vegetarians, amount.to_i)

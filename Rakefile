@@ -33,3 +33,10 @@ desc 'Restart Passenger'
 task :restart do
   sh 'touch tmp/restart.txt'
 end
+
+desc 'Send invitations'
+task :send_invitations do
+  set :environment, :development
+  require 'invitation'
+  Invitation.send_invitations!
+end
