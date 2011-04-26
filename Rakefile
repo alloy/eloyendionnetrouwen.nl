@@ -23,3 +23,13 @@ namespace :db do
     p Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').id
   end
 end
+
+desc 'Run tests'
+task :test do
+  sh "ruby -r #{FileList['test/*_test.rb'].join(' -r ')} -e ''"
+end
+
+desc 'Restart Passenger'
+task :restart do
+  sh 'touch tmp/restart.txt'
+end

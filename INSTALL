@@ -1,3 +1,4 @@
 gem install sinatra sinatra-activerecord
 gem install rack-test webrat
 mkdir log tmp
+cp config.rb.sample config.rb
