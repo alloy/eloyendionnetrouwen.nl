@@ -2,6 +2,12 @@ require 'config'
 require 'mailer'
 require 'validates_email_san'
 
+class Array
+  def random_element
+    self[rand(length)]
+  end
+end
+
 class Invitation < ActiveRecord::Base
   def self.send_invitations!
     invitations = where(:sent => false).where(arel_table[:email].not_eq(nil))
@@ -11,6 +17,7 @@ class Invitation < ActiveRecord::Base
   end
 
   before_save :ensure_attending_party_if_attending_dinner
+  before_create :set_token
 
   def email=(address)
     if address && address.strip.empty?
@@ -56,6 +63,19 @@ class Invitation < ActiveRecord::Base
 
   def list(str)
     str.split(",").map { |a| a.strip }
+  end
+
+  def set_token
+    token = nil
+    loop do
+      token = generate_token
+      break if Invitation.find_by_token(token).nil?
+    end
+    write_attribute :token, token
+  end
+
+  def generate_token
+    [1,2].map { |i| [1,2].map { (i.odd? ? ('a'..'z') : ('0'..'9')).to_a.random_element }.join }.join
   end
 
   def not_more_vegetarians_than_attendees

@@ -29,6 +29,26 @@ class InvitationTest < Test::Unit::TestCase
     assert @invitation.valid?
   end
 
+  it "generates a unique token" do
+    def @invitation.generate_token
+      'a1b2'
+    end
+    @invitation.save!
+    assert_equal 'a1b2', @invitation.reload.token
+
+    invitation2 = Invitation.new(:attendees => 'Rogier, Fransje', :email => 'rogier@example.org')
+    def invitation2.generate_token
+      def self.generate_token
+        # 2: this token will be returned the second time when the method has been overwritten by this implementation
+        'c3d4'
+      end
+      # 1: this token will be returned first which is a duplicate of @invitation.token
+      'a1b2'
+    end
+    invitation2.save!
+    assert_equal 'c3d4', invitation2.reload.token
+  end
+
   it "cleans the whitespace between the names" do
     @invitation.attendees = "Bassie, "
     assert_equal 'Bassie', @invitation.attendees
