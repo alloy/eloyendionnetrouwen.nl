@@ -24,9 +24,9 @@ Subject: Eloy en Dionne trouwen! #{address 'Kom je', 'Komen jullie'} ook?
 Hoi #{@invitation.attendees_sentence},
 
 Eloy en Dionne trouwen op 1 juni en zouden #{address 'jou', 'jullie'} er graag bij hebben!
-Klik op onderstaande link om aan te geven of en wanneer #{address 'je komt', 'jullie komen'}:
+Indien #{address 'je komt', 'jullie komen'}, laat dat dan *uiterlijk* 4 mei weten via onderstaande link:
 
-  http://eloyendionnetrouwen.nl/#{@invitation.token}
+http://eloyendionnetrouwen.nl/#{@invitation.token}
 
 Hopelijk tot dan!
 END_OF_MESSAGE
@@ -42,7 +42,7 @@ Hi #{@invitation.attendees_sentence},
 
 Eloy and Dionne are getting married on june the 1st and would love to have you join us!
 
-Reply to this email, in case you would like to come over, and provide the following details:
+Reply to this email *before* May the 5th, in case you would like to come over, and provide the following details:
 * Who? #{@invitation.attendees_sentence}.
 * Will you attend the wedding ceremony at 13:30?
 * Will you attend the party starting at 15:00?
