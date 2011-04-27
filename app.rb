@@ -15,6 +15,10 @@ get '/' do
   erb :index
 end
 
+get '/contact' do
+  erb :contact
+end
+
 get '/:invitation_token' do |token|
   redirect to("/invitations/#{token}")
 end

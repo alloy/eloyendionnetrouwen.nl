@@ -128,6 +128,11 @@ class InviteeTest < Test::Unit::TestCase
     assert last_response.not_found?
   end
 
+  it "sees a contact page" do
+    get "/contact"
+    assert last_response.ok?
+  end
+
   private
 
   def update_invitation(invitation_attributes, redirect_to = nil)
