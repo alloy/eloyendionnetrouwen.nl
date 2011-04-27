@@ -19,7 +19,8 @@ get '/invitations/:token' do |token|
   if @invitation = Invitation.find_by_token(token)
     erb(@invitation.confirmed? ? :confirmation : :invitation)
   else
-    404
+    status 404
+    body erb(:not_found)
   end
 end
 
@@ -27,7 +28,8 @@ get '/invitations/:token/confirm' do |token|
   if @invitation = Invitation.find_by_token(token)
     erb :confirmation
   else
-    404
+    status 404
+    body erb(:not_found)
   end
 end
 
@@ -44,6 +46,7 @@ post '/invitations/:token' do |token|
       erb :invitation
     end
   else
-    404
+    status 404
+    body erb(:not_found)
   end
 end
