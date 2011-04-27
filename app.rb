@@ -16,25 +16,34 @@ get '/:invitation_token' do |token|
 end
 
 get '/invitations/:token' do |token|
-  @invitation = Invitation.find_by_token(token)
-  erb(@invitation.confirmed? ? :confirmation : :invitation)
+  if @invitation = Invitation.find_by_token(token)
+    erb(@invitation.confirmed? ? :confirmation : :invitation)
+  else
+    404
+  end
 end
 
 get '/invitations/:token/confirm' do |token|
-  @invitation = Invitation.find_by_token(token)
-  erb :confirmation
+  if @invitation = Invitation.find_by_token(token)
+    erb :confirmation
+  else
+    404
+  end
 end
 
 post '/invitations/:token' do |token|
-  @invitation = Invitation.find_by_token(token)
-  if @invitation.update_attributes(params[:invitation])
-    if @invitation.confirmed?
-      Mailer.send_confirmation(@invitation) if @invitation.email
-      redirect to("/invitations/#{token}")
+  if @invitation = Invitation.find_by_token(token)
+    if @invitation.update_attributes(params[:invitation])
+      if @invitation.confirmed?
+        Mailer.send_confirmation(@invitation) if @invitation.email
+        redirect to("/invitations/#{token}")
+      else
+        redirect to("/invitations/#{token}/confirm")
+      end
     else
-      redirect to("/invitations/#{token}/confirm")
+      erb :invitation
     end
   else
-    erb :invitation
+    404
   end
 end

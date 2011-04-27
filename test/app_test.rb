@@ -119,6 +119,15 @@ class InviteeTest < Test::Unit::TestCase
     assert last_response.body.include?('kom je')
   end
 
+  it "returns a 404 when an invitation can't be found by token" do
+    get "/invitations/doesnotexist"
+    assert last_response.not_found?
+    get "/invitations/doesnotexist/confirm"
+    assert last_response.not_found?
+    post "/invitations/doesnotexist"
+    assert last_response.not_found?
+  end
+
   private
 
   def update_invitation(invitation_attributes, redirect_to = nil)
