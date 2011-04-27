@@ -31,7 +31,7 @@ namespace :db do
 
   task :seed => 'db:recreate:development' do
     require 'app'
-    puts Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').token
+    puts Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
     puts Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
   end
 
