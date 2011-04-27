@@ -1,12 +1,7 @@
 require 'config'
+require 'helpers'
 require 'mailer'
 require 'validates_email_san'
-
-class Array
-  def random_element
-    self[rand(length)]
-  end
-end
 
 class Invitation < ActiveRecord::Base
   def self.send_invitations!

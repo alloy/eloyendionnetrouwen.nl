@@ -1,4 +1,15 @@
+class Array
+  def random_element
+    self[rand(length)]
+  end
+end
+
 module Helpers
+  def body_tag
+    background = Dir.glob(File.join(settings.public, 'backgrounds/*.jpg')).map { |f| File.basename(f) }.random_element
+    %{<body style="background-image:url('/backgrounds/#{background}');">}
+  end
+
   def address(singular_form, plural_form, amount = nil)
     amount ||= @invitation.attendees_list.size
     amount == 1 ? singular_form : plural_form
