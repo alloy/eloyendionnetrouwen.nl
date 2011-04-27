@@ -21,6 +21,14 @@ class InvitationTest < Test::Unit::TestCase
     assert !@invitation.valid?
   end
 
+  it "is invalid with an invalid email" do
+    assert @invitation.valid?
+    @invitation.email = '.foo@example.com'
+    assert !@invitation.valid?
+    @invitation.email = "  "
+    assert @invitation.valid?
+  end
+
   it "cleans the whitespace between the names" do
     @invitation.attendees = "Bassie, "
     assert_equal 'Bassie', @invitation.attendees

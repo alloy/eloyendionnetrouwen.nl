@@ -1,5 +1,6 @@
 require 'config'
 require 'mailer'
+require 'validates_email_san'
 
 class Invitation < ActiveRecord::Base
   def self.send_invitations!
@@ -65,4 +66,5 @@ class Invitation < ActiveRecord::Base
 
   validates_presence_of :attendees, :message => "De gastenlijst mag niet leeg zijn."
   validate :not_more_vegetarians_than_attendees
+  validates_email :email, :allow_nil => true, :message => "Het opgegeven email adres is niet valide."
 end

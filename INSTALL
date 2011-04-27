@@ -1,4 +1,4 @@
-gem install sinatra sinatra-activerecord
+gem install sinatra sinatra-activerecord validates_email-san
 gem install rack-test webrat
 mkdir log tmp
 cp config.rb.sample config.rb
