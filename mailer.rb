@@ -17,7 +17,7 @@ module Mailer
 
       def dutch
 <<END_OF_MESSAGE
-From: Eloy en Dionne trouwen <#{FROM_EMAIL}>
+From: <#{FROM_EMAIL}>
 To: <#{@invitation.email}>
 Subject: Eloy en Dionne trouwen! #{address 'Kom je', 'Komen jullie'} ook?
 
@@ -34,7 +34,7 @@ END_OF_MESSAGE
 
       def english
 <<END_OF_MESSAGE
-From: Eloy and Dionne are getting married <#{FROM_EMAIL}>
+From: <#{FROM_EMAIL}>
 To: <#{@invitation.email}>
 Subject: Eloy and Dionne are getting married! Will you join us?
 
@@ -72,7 +72,7 @@ END_OF_MESSAGE
 
       def to_s
 <<END_OF_MESSAGE
-From: Eloy en Dionne trouwen <#{FROM_EMAIL}>
+From: <#{FROM_EMAIL}>
 To: <#{@invitation.email}>
 Subject: #{subject}
 
