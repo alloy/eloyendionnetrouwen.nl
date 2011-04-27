@@ -29,13 +29,13 @@ namespace :db do
     end
   end
 
-  task :recreate => ['db:recreate:test', 'db:recreate:development']
-
   task :seed => 'db:recreate:development' do
     require 'app'
     puts Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').token
     puts Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
   end
+
+  task :recreate => ['db:recreate:test', 'db:seed']
 end
 
 desc 'Run tests'

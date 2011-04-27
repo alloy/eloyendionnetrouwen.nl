@@ -4,6 +4,7 @@ class CreateInvitations < ActiveRecord::Migration
       t.string :email
       t.string :token
       t.string :attendees
+      t.text   :note
       t.boolean :sent, :default => false
       t.boolean :english, :default => false
       t.boolean :confirmed, :default => false

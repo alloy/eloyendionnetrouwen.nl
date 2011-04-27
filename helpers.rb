@@ -42,6 +42,9 @@ module Helpers
     else
       result << "#{address 'Je maakt', 'Jullie maken'} geen gebruik van de BBQ."
     end
+    if @invitation.note.present?
+      result << "Opmerking: #{@invitation.note}"
+    end
     result
   end
 end
