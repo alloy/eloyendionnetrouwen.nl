@@ -36,6 +36,8 @@ class InvitationTest < Test::Unit::TestCase
     assert_equal 'Greet', @invitation.attendees_sentence
     @invitation.attendees = 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka'
     assert_equal 'Rini, Sander, Mats, Mila, Nena, Jacky en Yuka', @invitation.attendees_sentence
+    @invitation.english = true
+    assert_equal 'Rini, Sander, Mats, Mila, Nena, Jacky, and Yuka', @invitation.attendees_sentence
   end
 
   it "returns wether or not they will attend at all" do
@@ -84,13 +86,14 @@ class InvitationTest < Test::Unit::TestCase
   it "sends invitation emails to those that have not received one yet and have an email address" do
     invitation1 = Invitation.create!(:attendees => 'Bassie', :email => 'bassie@caravan.es')
     invitation2 = Invitation.create!(:attendees => 'Rogier, Fransje', :email => 'rogier@example.org')
-    invitation3 = Invitation.create!(:attendees => 'Tomas, Daphne', :email => 'tomas@example.org', :sent => true)
-    invitation4 = Invitation.create!(:attendees => 'Opa, Oma', :email => '')
+    invitation3 = Invitation.create!(:attendees => 'Laurent, Stephanie, Alexis', :email => 'lrz@example.org', :english => true)
+    invitation4 = Invitation.create!(:attendees => 'Tomas, Daphne', :email => 'tomas@example.org', :sent => true)
+    invitation5 = Invitation.create!(:attendees => 'Opa, Oma', :email => '')
     Invitation.send_invitations!
-    [invitation1, invitation2, invitation3, invitation4].each(&:reload)
+    [invitation1, invitation2, invitation3, invitation4, invitation5].each(&:reload)
     emails = Net::SMTP.sent_emails
 
-    assert_equal 2, emails.size
+    assert_equal 3, emails.size
 
     assert invitation1.sent?
     assert_equal FROM_EMAIL, emails[0].from
@@ -104,6 +107,13 @@ class InvitationTest < Test::Unit::TestCase
     assert emails[1].message.include?("Rogier en Fransje,")
     assert emails[1].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.id}")
 
-    assert !invitation4.sent?
+    assert invitation3.sent?
+    assert_equal FROM_EMAIL, emails[2].from
+    assert_equal invitation3.email, emails[2].to
+    assert emails[2].message.include?("Laurent, Stephanie, and Alexis")
+    assert !emails[2].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.id}")
+    assert emails[2].message.include?("Reply to this email")
+
+    assert !invitation5.sent?
   end
 end

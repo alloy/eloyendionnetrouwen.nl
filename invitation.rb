@@ -43,7 +43,7 @@ class Invitation < ActiveRecord::Base
     if list.size == 1
       list.first
     else
-      list[0..-2].join(", ") << " en #{list.last}"
+      list[0..-2].join(", ") << "#{english? ? ', and' : ' en'} #{list.last}"
     end
   end
 
