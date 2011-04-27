@@ -6,15 +6,15 @@ class InviteeTest < Test::Unit::TestCase
   end
 
   it "is redirected to the actual invitation page" do
-    get "/#{@invitation.id}"
+    get "/#{@invitation.token}"
     assert last_response.redirect?
-    assert_equal "http://example.org/invitations/#{@invitation.id}", last_response.headers['Location']
+    assert_equal "http://example.org/invitations/#{@invitation.token}", last_response.headers['Location']
   end
 
   it "sees an invitation page" do
-    get "/invitations/#{@invitation.id}"
+    get "/invitations/#{@invitation.token}"
     assert last_response.ok?
-    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.token}\"][@method=post]" do
       assert_have_tag 'input[@name="invitation[attendees]"][@value="Bassie, Adriaan"]'
       assert_have_tag 'input[@name="invitation[email]"][@value="bassie@caravan.es"]'
     end
@@ -56,27 +56,27 @@ class InviteeTest < Test::Unit::TestCase
   end
 
   it "shows the form with validation errors" do
-    post "/invitations/#{@invitation.id}", :invitation => { :attendees => '', :vegetarians => 3 }
+    post "/invitations/#{@invitation.token}", :invitation => { :attendees => '', :vegetarians => 3 }
     assert last_response.ok?
     assert_have_tag 'li', :content => "De gastenlijst mag niet leeg zijn."
     assert_have_tag 'li', :content => "Er kunnen niet meer vegetariërs (3) dan gasten (0) zijn."
-    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.token}\"][@method=post]" do
       assert_have_tag 'input[@name="invitation[vegetarians]"][@value="3"]'
     end
     assert_equal 0, @invitation.reload.vegetarians
   end
 
   it "sees a confirmation page" do
-    get "/invitations/#{@invitation.id}/confirm"
+    get "/invitations/#{@invitation.token}/confirm"
     assert last_response.ok?
-    assert_have_tag "form[@action=\"/invitations/#{@invitation.id}\"][@method=post]" do
+    assert_have_tag "form[@action=\"/invitations/#{@invitation.token}\"][@method=post]" do
       assert_have_tag 'input[@name="invitation[confirmed]"][@value="1"]'
     end
   end
 
   it "confirms that they will come" do
     @invitation.update_attribute(:attending_wedding, true)
-    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.token}")
     assert @invitation.confirmed?
     emails = Net::SMTP.sent_emails
     assert_equal 1, emails.size
@@ -86,7 +86,7 @@ class InviteeTest < Test::Unit::TestCase
   end
 
   it "confirms that they will not come" do
-    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.token}")
     assert @invitation.confirmed?
     emails = Net::SMTP.sent_emails
     assert_equal 1, emails.size
@@ -97,24 +97,24 @@ class InviteeTest < Test::Unit::TestCase
 
   it "does not send a confirmation email if there is no address" do
     @invitation.update_attribute(:email, nil)
-    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.id}")
+    update_invitation({ :confirmed => '1' }, "http://example.org/invitations/#{@invitation.token}")
     assert @invitation.confirmed?
     assert Net::SMTP.sent_emails.empty?
   end
 
   it "shows a confirmed invitation page" do
     @invitation.update_attribute(:confirmed, true)
-    get "/invitations/#{@invitation.id}"
+    get "/invitations/#{@invitation.token}"
     assert last_response.ok?
     assert_have_tag "form", :count => 0
   end
 
   it "addresses the attendee or attendees in the proper way" do
-    get "/invitations/#{@invitation.id}"
+    get "/invitations/#{@invitation.token}"
     assert last_response.body.include?('komen jullie')
     assert !last_response.body.include?('kom je')
     @invitation.update_attribute(:attendees, 'Bassie')
-    get "/invitations/#{@invitation.id}"
+    get "/invitations/#{@invitation.token}"
     assert !last_response.body.include?('komen jullie')
     assert last_response.body.include?('kom je')
   end
@@ -122,9 +122,9 @@ class InviteeTest < Test::Unit::TestCase
   private
 
   def update_invitation(invitation_attributes, redirect_to = nil)
-    post "/invitations/#{@invitation.id}", :invitation => invitation_attributes
+    post "/invitations/#{@invitation.token}", :invitation => invitation_attributes
     assert last_response.redirect?
-    assert_equal(redirect_to || "http://example.org/invitations/#{@invitation.id}/confirm", last_response.headers['Location'])
+    assert_equal(redirect_to || "http://example.org/invitations/#{@invitation.token}/confirm", last_response.headers['Location'])
     @invitation.reload
   end
 end

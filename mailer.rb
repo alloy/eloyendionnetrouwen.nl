@@ -26,7 +26,7 @@ Hoi #{@invitation.attendees_sentence},
 Eloy en Dionne trouwen op 1 juni en zouden #{address 'jou', 'jullie'} er graag bij hebben!
 Klik op onderstaande link om aan te geven of en wanneer #{address 'je komt', 'jullie komen'}:
 
-  http://eloyendionnetrouwen.nl/#{@invitation.id}
+  http://eloyendionnetrouwen.nl/#{@invitation.token}
 
 Hopelijk tot dan!
 END_OF_MESSAGE

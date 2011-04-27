@@ -17,10 +17,24 @@ namespace :db do
     end
   end
 
-  task :seed => 'db:migrate:development' do
+  namespace :recreate do
+    task :development do
+      rm_f 'development.db'
+      Rake::Task['db:migrate:development'].invoke
+    end
+
+    task :test do
+      rm_f 'test.db'
+      Rake::Task['db:migrate:test'].invoke
+    end
+  end
+
+  task :recreate => ['db:recreate:test', 'db:recreate:development']
+
+  task :seed => 'db:recreate:development' do
     require 'app'
-    p Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').id
-    p Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').id
+    puts Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es').token
+    puts Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
   end
 end
 

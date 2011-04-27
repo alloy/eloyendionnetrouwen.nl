@@ -5,7 +5,7 @@ module Helpers
   end
 
   def update_invitation_form_tag
-    %{<form action="/invitations/#{@invitation.id}" method="post">}
+    %{<form action="/invitations/#{@invitation.token}" method="post">}
   end
 
   def textfield(attr, style)

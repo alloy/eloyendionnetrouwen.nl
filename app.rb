@@ -11,28 +11,28 @@ get '/' do
   erb :index
 end
 
-get '/:invitation_id' do |id|
-  redirect to("/invitations/#{id}")
+get '/:invitation_token' do |token|
+  redirect to("/invitations/#{token}")
 end
 
-get '/invitations/:id' do |id|
-  @invitation = Invitation.find(id)
+get '/invitations/:token' do |token|
+  @invitation = Invitation.find_by_token(token)
   erb(@invitation.confirmed? ? :confirmation : :invitation)
 end
 
-get '/invitations/:id/confirm' do |id|
-  @invitation = Invitation.find(id)
+get '/invitations/:token/confirm' do |token|
+  @invitation = Invitation.find_by_token(token)
   erb :confirmation
 end
 
-post '/invitations/:id' do |id|
-  @invitation = Invitation.find(id)
+post '/invitations/:token' do |token|
+  @invitation = Invitation.find_by_token(token)
   if @invitation.update_attributes(params[:invitation])
     if @invitation.confirmed?
       Mailer.send_confirmation(@invitation) if @invitation.email
-      redirect to("/invitations/#{id}")
+      redirect to("/invitations/#{token}")
     else
-      redirect to("/invitations/#{id}/confirm")
+      redirect to("/invitations/#{token}/confirm")
     end
   else
     erb :invitation

@@ -57,7 +57,7 @@
 
             <% unless @invitation.confirmed? %>
               <%= update_invitation_form_tag %>
-                <a href="/invitations/<%= @invitation.id %>">&larr; terug</a>
+                <a href="/invitations/<%= @invitation.token %>">&larr; terug</a>
                 <input type="hidden" name="invitation[confirmed]" value="1" />
                 <input type="submit" value="<%= @invitation.attending? ? "Klopt als een bus!" : "Op 1 juni #{address 'ben ik', 'zijn wij'} er helaas niet bij."%>" />
               </form>

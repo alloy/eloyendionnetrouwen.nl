@@ -127,19 +127,19 @@ class InvitationTest < Test::Unit::TestCase
     assert_equal FROM_EMAIL, emails[0].from
     assert_equal invitation1.email, emails[0].to
     assert emails[0].message.include?("Bassie,")
-    assert emails[0].message.include?("http://eloyendionnetrouwen.nl/#{invitation1.id}")
+    assert emails[0].message.include?("http://eloyendionnetrouwen.nl/#{invitation1.token}")
 
     assert invitation2.sent?
     assert_equal FROM_EMAIL, emails[1].from
     assert_equal invitation2.email, emails[1].to
     assert emails[1].message.include?("Rogier en Fransje,")
-    assert emails[1].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.id}")
+    assert emails[1].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.token}")
 
     assert invitation3.sent?
     assert_equal FROM_EMAIL, emails[2].from
     assert_equal invitation3.email, emails[2].to
     assert emails[2].message.include?("Laurent, Stephanie, and Alexis")
-    assert !emails[2].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.id}")
+    assert !emails[2].message.include?("http://eloyendionnetrouwen.nl/#{invitation2.token}")
     assert emails[2].message.include?("Reply to this email")
 
     assert !invitation5.sent?
