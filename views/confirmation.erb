@@ -20,12 +20,8 @@
       <div id="inner">
         <div id="container">
           <div id="header">
-            <h1>
-            <a href="/">&larr; Eloy &amp; Dionne trouwen!</a>
-            </h1>
-            <ul>
-              <li><a href="/contact">Contact</a></li>
-            </ul>
+            <h1><a href="/">&larr; Eloy &amp; Dionne trouwen!</a></h1>
+            <%= header_links %>
             <hr class="right"/>
           </div>
           <% if @invitation.confirmed? %>

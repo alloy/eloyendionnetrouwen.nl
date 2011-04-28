@@ -10,6 +10,13 @@ module Helpers
     %{<body style="background-image:url('/backgrounds/#{background}');">}
   end
 
+  def header_links
+    %{<ul>
+        <li><a href="/present">Kado</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>}
+  end
+
   def address(singular_form, plural_form, amount = nil)
     amount ||= @invitation.attendees_list.size
     amount == 1 ? singular_form : plural_form
