@@ -63,9 +63,6 @@ a:hover, a:hover span#eighty, a:hover span#beans
 
 div#wrapper
 {
-  background-image: url('/images/gradient.png');
-  background-position: center;
-  background-repeat: repeat-y;
   min-width:490px;
   overflow:hidden;
   opacity: 0.80;
