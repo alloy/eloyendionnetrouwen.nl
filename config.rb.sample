@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/activerecord'
 
+#set :environment, :production
+
 app = Sinatra::Application
 set :database, "sqlite://#{app.environment}.db"
 set :root, File.expand_path('../', __FILE__)

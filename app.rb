@@ -11,6 +11,18 @@ not_found do
   erb(:not_found)
 end
 
+before do
+  @start = Time.now
+  LOGGER.info "#{request.request_method} #{request.path}: #{params.inspect}"
+end
+
+after do
+  if (e = env['sinatra.error']) && !e.is_a?(Sinatra::NotFound)
+    LOGGER.info "An exception occurred: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+  end
+  LOGGER.info "Finished: #{response.status} (in #{Time.now - @start} seconds)\n"
+end
+
 get '/' do
   erb :index
 end

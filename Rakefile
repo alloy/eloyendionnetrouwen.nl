@@ -4,40 +4,45 @@ require 'sinatra/activerecord/rake'
 
 namespace :db do
   namespace :migrate do
-    task :development do
-      set :environment, :development
-      require 'app'
-      Rake::Task['db:migrate'].invoke
-    end
-
-    task :test do
-      set :environment, :test
-      require 'app'
-      Rake::Task['db:migrate'].invoke
+    [:test, :development, :production].each do |env|
+      task env do
+        set :environment, env
+        sh "mysqladmin create eloyendionnetrouwen-production" if env == :production
+        require 'app'
+        Rake::Task['db:migrate'].invoke
+      end
     end
   end
 
   namespace :recreate do
-    task :development do
-      rm_f 'development.db'
-      Rake::Task['db:migrate:development'].invoke
+    [:test, :development].each do |env|
+      task env do
+        rm_f "#{env}.db"
+        Rake::Task["db:migrate:#{env}"].invoke
+      end
     end
 
-    task :test do
-      rm_f 'test.db'
-      Rake::Task['db:migrate:test'].invoke
+    task :production do
+      sh "mysqladmin drop eloyendionnetrouwen-production"
+      Rake::Task['db:migrate:production'].invoke
     end
   end
 
-  task :seed => ['db:recreate:development', :restart] do
-    require 'app'
-    tokens = []
-    tokens << Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
-    tokens << Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
-    puts
-    puts "Start by using either of these URLs:"
-    tokens.each do |token|
-      puts "  http://eloyendionnetrouwen.local/#{token}"
+  task :seed => 'db:seed:development'
+
+  namespace :seed do
+    [:development, :production].each do |env|
+      task env => ["db:recreate:#{env}", :restart] do
+        require 'app'
+        tokens = []
+        tokens << Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
+        tokens << Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
+        puts
+        puts "Start by using either of these URLs:"
+        tokens.each do |token|
+          puts "  http://eloyendionnetrouwen.local/#{token}"
+        end
+      end
     end
   end
 
@@ -54,9 +59,12 @@ task :restart do
   sh 'touch tmp/restart.txt'
 end
 
-desc 'Send invitations'
-task :send_invitations do
-  set :environment, :development
-  require 'invitation'
-  Invitation.send_invitations!
+namespace :send_invitations do
+  [:development, :production].each do |env|
+    task env do
+      set :environment, env
+      require 'invitation'
+      Invitation.send_invitations!
+    end
+  end
 end
