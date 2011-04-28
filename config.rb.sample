@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'sinatra'
+
+gem 'activerecord', '>= 3.0.7'
 require 'sinatra/activerecord'
 
 #set :environment, :production
@@ -7,10 +9,11 @@ require 'sinatra/activerecord'
 app = Sinatra::Application
 set :database, "sqlite://#{app.environment}.db"
 set :root, File.expand_path('../', __FILE__)
-#set :database, "mysql://localhost/eloyendionnetrouwen-#{Sinatra::Application.environment}"
+#set :database, "mysql://localhost/eloyendionnetrouwen-#{app.environment}"
 
 require 'logger'
-ActiveRecord::Base.logger = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
+LOGGER = Logger.new(File.join(app.root, 'log', "#{app.environment}.log"))
+ActiveRecord::Base.logger = LOGGER unless app.environment == :production
 
 FROM_EMAIL = 'info@eloyendionnetrouwen.nl'
 SMTP_HELO = 'eloyendionnetrouwen.nl'
@@ -18,3 +21,4 @@ SMTP_HOST = 'mail.authsmtp.com'
 SMTP_PORT = 2525
 SMTP_USER = 'bob'
 SMTP_PASS = 'secret'
+
