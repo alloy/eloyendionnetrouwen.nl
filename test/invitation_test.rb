@@ -21,6 +21,12 @@ class InvitationTest < Test::Unit::TestCase
     assert !@invitation.valid?
   end
 
+  it "is invalid with a negative amount of vegetarians" do
+    assert @invitation.valid?
+    @invitation.vegetarians = -2
+    assert !@invitation.valid?
+  end
+
   it "is invalid with an invalid email" do
     assert @invitation.valid?
     @invitation.email = '.foo@example.com'

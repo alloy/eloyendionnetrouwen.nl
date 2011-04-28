@@ -73,13 +73,15 @@ class Invitation < ActiveRecord::Base
     [1,2].map { |i| [1,2].map { (i.odd? ? ('a'..'z') : ('0'..'9')).to_a.random_element }.join }.join
   end
 
-  def not_more_vegetarians_than_attendees
-    if vegetarians > attendees_list.size
+  def amount_of_vegetarians
+    if vegetarians < 0
+      errors.add(:vegetarians, "Het aantal vegetariërs kan niet negatief zijn.")
+    elsif vegetarians > attendees_list.size
       errors.add(:vegetarians, "Er kunnen niet meer vegetariërs (#{vegetarians}) dan gasten (#{attendees_list.size}) zijn.")
     end
   end
 
   validates_presence_of :attendees, :message => "De gastenlijst mag niet leeg zijn."
-  validate :not_more_vegetarians_than_attendees
+  validate :amount_of_vegetarians
   validates_email :email, :allow_nil => true, :message => "Het opgegeven email adres is niet valide."
 end

@@ -29,11 +29,12 @@ namespace :db do
     end
   end
 
-  task :seed => 'db:recreate:development' do
+  task :seed => ['db:recreate:development', :restart] do
     require 'app'
     tokens = []
     tokens << Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
     tokens << Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
+    puts
     puts "Start by using either of these URLs:"
     tokens.each do |token|
       puts "  http://eloyendionnetrouwen.local/#{token}"
