@@ -1,6 +1,6 @@
 class Array
   def random_element
-    self[rand(length)]
+    self[Kernel.rand(length)]
   end
 end
 
