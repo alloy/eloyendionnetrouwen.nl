@@ -35,7 +35,11 @@
               <h2>Jammer dat <%= address 'je niet kunt', 'jullie niet kunnen' %> komen.</h2>
             <% end %>
           <% else %>
-            <h2>Klopt dit?</h2>
+            <% if @invitation.attending? %>
+              <h2>Klopt dit?</h2>
+            <% else %>
+              <h2><%= address 'Je hebt', 'Jullie hebben' %> aangegeven niet te kunnen komen. Klopt dit?</h2>
+            <% end %>
           <% end %>
           <hr/>
           <div id="content">
@@ -56,7 +60,7 @@
               <%= update_invitation_form_tag %>
                 <a href="/invitations/<%= @invitation.token %>">&larr; terug</a>
                 <input type="hidden" name="invitation[confirmed]" value="1" />
-                <input type="submit" value="<%= @invitation.attending? ? "Klopt als een bus!" : "Op 1 juni #{address 'ben ik', 'zijn wij'} er helaas niet bij."%>" />
+                <input type="submit" value="Klopt als een bus!" />
               </form>
             <% end %>
           <hr/>
