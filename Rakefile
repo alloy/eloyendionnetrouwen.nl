@@ -31,8 +31,13 @@ namespace :db do
 
   task :seed => 'db:recreate:development' do
     require 'app'
-    puts Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
-    puts Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
+    tokens = []
+    tokens << Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@example.org').token
+    tokens << Invitation.create(:attendees => 'Rini, Sander, Mats, Mila, Nena, Jacky, Yuka', :email => 'rini@example.org').token
+    puts "Start by using either of these URLs:"
+    tokens.each do |token|
+      puts "  http://eloyendionnetrouwen.local/#{token}"
+    end
   end
 
   task :recreate => ['db:recreate:test', 'db:seed']
