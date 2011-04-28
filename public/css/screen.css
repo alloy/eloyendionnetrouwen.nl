@@ -65,7 +65,6 @@ div#wrapper
 {
   min-width:490px;
   overflow:hidden;
-  opacity: 0.80;
 }
 
 div#inner{
@@ -86,7 +85,7 @@ div#container
   color:#222;
   font-size:15px;
   line-height:150%;
-  opacity:0.9px;
+  opacity:0.79;
   width:450px;
   padding:20px;
   text-shadow:0 1px 0 #fff;
@@ -283,13 +282,6 @@ hr.right
   clear:right;
 }
 
-#content code,pre
-{
-  font-family:"Monaco", "Courier New", monospace;
-  font-size: 12px;
-  line-height: 150%;
-}
-
 pre{
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
@@ -299,7 +291,7 @@ pre{
 }
 
 
-div#content pre
+div#content .map
 {
   -moz-border-radius:5px;
   -moz-box-shadow:0 -1px 0 #444;
