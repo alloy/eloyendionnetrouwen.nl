@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/activerecord/rake'
 
+$:.unshift File.expand_path('../', __FILE__)
+
 namespace :db do
   namespace :migrate do
     [:test, :development, :production].each do |env|
@@ -51,7 +53,7 @@ end
 
 desc 'Run tests'
 task :test do
-  sh "ruby -r #{FileList['test/*_test.rb'].join(' -r ')} -e ''"
+  sh "ruby -I. -r #{FileList['test/*_test.rb'].map { |f| f[0..-4] }.join(' -r ')} -e ''"
 end
 
 desc 'Restart Passenger'

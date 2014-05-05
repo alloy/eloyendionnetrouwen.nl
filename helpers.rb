@@ -6,7 +6,7 @@ end
 
 module Helpers
   def body_tag
-    background = Dir.glob(File.join(settings.public, 'backgrounds/*.jpg')).map { |f| File.basename(f) }.random_element
+    background = Dir.glob(File.join(settings.public_folder, 'backgrounds/*.jpg')).map { |f| File.basename(f) }.random_element
     %{<body style="background-image:url('/backgrounds/#{background}');">}
   end
 

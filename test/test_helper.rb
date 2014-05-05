@@ -3,29 +3,17 @@ require 'sinatra'
 
 set :environment, :test
 
-require File.expand_path('../../app', __FILE__)
-require 'test/unit'
+$:.unshift File.expand_path('../../', __FILE__)
+require 'app'
+
+require 'minitest/autorun'
+require 'minitest/reporters'
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
 require 'rack/test'
 require 'webrat'
 
-class Test::Unit::TestCase
-  def self.it(description, &block)
-    define_method("test: #{description}", &block)
-  end
-
-  include Rack::Test::Methods
-
-  include Webrat::Matchers
-  include Webrat::HaveTagMatcher
-
-  def response_body
-    last_response.body
-  end
-
-  def app
-    Sinatra::Application
-  end
-
+class MiniTest::Unit::TestCase
   def teardown
     Invitation.delete_all
     Net::SMTP.reset!

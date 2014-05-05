@@ -1,6 +1,18 @@
 require File.expand_path('../test_helper', __FILE__)
 
-class InviteeTest < Test::Unit::TestCase
+class InviteeTest < MiniTest::Spec
+  include Rack::Test::Methods
+  include Webrat::Matchers
+  include Webrat::HaveTagMatcher
+
+  def response_body
+    last_response.body
+  end
+
+  def app
+    Sinatra::Application
+  end
+
   def setup
     @invitation = Invitation.create(:attendees => 'Bassie, Adriaan', :email => 'bassie@caravan.es')
   end
