@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'sinatra'
+
+require 'active_record'
 require 'sinatra/activerecord/rake'
 
 $:.unshift File.expand_path('../', __FILE__)
@@ -9,24 +11,28 @@ namespace :db do
     [:test, :development, :production].each do |env|
       task env do
         ENV['RACK_ENV'] = env.to_s
-        sh "mysqladmin create eloyendionnetrouwen-production" if env == :production
         require 'app'
         Rake::Task['db:migrate'].invoke
       end
     end
   end
 
-  namespace :recreate do
-    [:test, :development].each do |env|
+  namespace :create do
+    [:test, :development, :production].each do |env|
       task env do
-        rm_f "#{env}.db"
-        Rake::Task["db:migrate:#{env}"].invoke
+        ENV['RACK_ENV'] = env.to_s
+        sh "createdb -h localhost eloyendionnetrouwen_#{env} -E UTF8"
       end
     end
+  end
 
-    task :production do
-      sh "mysqladmin drop eloyendionnetrouwen-production"
-      Rake::Task['db:migrate:production'].invoke
+  namespace :recreate do
+    [:test, :development, :production].each do |env|
+      task env do
+        sh "dropdb eloyendionnetrouwen_#{env}"
+        Rake::Task["db:create:#{env}"].invoke
+        Rake::Task["db:migrate:#{env}"].invoke
+      end
     end
   end
 
@@ -56,11 +62,6 @@ task :test do
   sh "ruby -I. -r #{FileList['test/*_test.rb'].map { |f| f[0..-4] }.join(' -r ')} -e ''"
 end
 
-desc 'Restart Passenger'
-task :restart do
-  sh 'touch tmp/restart.txt'
-end
-
 namespace :send_invitations do
   [:development, :production].each do |env|
     task env do
@@ -69,4 +70,9 @@ namespace :send_invitations do
       Invitation.send_invitations!
     end
   end
+end
+
+desc 'Serve the application'
+task :serve do
+  exec 'env PORT=4567 RACK_ENV=development foreman start'
 end

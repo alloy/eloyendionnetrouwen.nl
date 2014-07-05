@@ -1,9 +1,12 @@
 source 'https://rubygems.org'
 
+gem 'foreman'
+gem 'thin'
+
 gem 'psych'
 gem 'sinatra'
 gem 'sinatra-activerecord'
-gem 'sqlite3'
+gem 'pg'
 gem 'validates_email-san'
 
 group :development do
