@@ -1,7 +1,7 @@
+ENV['RACK_ENV'] = 'test'
+
 require 'rubygems'
 require 'sinatra'
-
-set :environment, :test
 
 $:.unshift File.expand_path('../../', __FILE__)
 require 'app'
@@ -19,8 +19,6 @@ class MiniTest::Unit::TestCase
     Net::SMTP.reset!
   end
 end
-
-set :environment, :test
 
 require 'net/smtp'
 module Net

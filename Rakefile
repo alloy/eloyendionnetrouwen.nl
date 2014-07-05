@@ -8,7 +8,7 @@ namespace :db do
   namespace :migrate do
     [:test, :development, :production].each do |env|
       task env do
-        set :environment, env
+        ENV['RACK_ENV'] = env.to_s
         sh "mysqladmin create eloyendionnetrouwen-production" if env == :production
         require 'app'
         Rake::Task['db:migrate'].invoke

@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'psych'
 gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sqlite3'
